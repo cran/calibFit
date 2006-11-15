@@ -1,0 +1,8 @@
+export("calib.fit","calib")
+exportClasses("lof.test","calib.fit","Calib")
+
+importFrom("graphics","plot")
+importFrom("stats","coefficients")
+importFrom("stats","fitted")
+importFrom("stats","residuals")
+exportMethods("plot","mdc","rdl","loq","coefficients","fitted","residuals")

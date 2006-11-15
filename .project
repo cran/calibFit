@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>R-calib</name>
+	<comment></comment>
+	<projects>
+		<project>Tools</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>de.walware.statet.r.core.RInternalBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>de.walware.statet.base.StatetNature</nature>
+		<nature>de.walware.statet.r.core.RNature</nature>
+	</natures>
+</projectDescription>
