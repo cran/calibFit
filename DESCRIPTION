@@ -1,10 +1,10 @@
 Package: calib
-Version: 0.1.02
-Date: 2006-11-15
+Version: 2.0.0
+Date: 01-28-09
 Title: Statistical tool for calibration of plate based bioassays
-Author: Dan Samarov <dan_samarov@bd.com>,Perry Haaland <perry_haaland@bd.com>
+Author: Daniel Samarov <daniel_samarov@bd.com>, Perry Haaland <perry_haaland@bd.com>, Elaine McVey <elaine_mcvey@bd.com>
 Maintainer: Perry Haaland <perry_d_haaland@bd.com>
-Depends: R (>= 2.4.0), stats
+Depends: R (>= 2.7.0), stats, nlme, methods
 Imports: graphics
 Suggests: 
 Description: Provides basic S4 data structures and routines for
@@ -12,4 +12,4 @@ Description: Provides basic S4 data structures and routines for
 License: GNU General Public License 2.0.
 URL: http://www.bd.com
 biocViews: Statistics, Infrastructure, CellBasedAssays
-Packaged: Wed Oct 10 11:05:05 2007; samarov
+Packaged: Wed Jan 28 11:39:55 2009; samarov

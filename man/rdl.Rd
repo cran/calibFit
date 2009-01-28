@@ -1,17 +1,33 @@
-\name{rdl-methods}
-\docType{methods}
+\name{rdl}
 \alias{rdl}
-
-\title{Reliable Detection Limit (RDL)}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{Reliable Detection Limit}
 \description{
- Extracts RDL value from an object of class calib.fit
+Methods for function \code{rdl}
 }
-\section{Methods}{
-\describe{
+\usage{
+rdl(x, ...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{x}{An object of class \code{calib.fit}}
+  \item{\dots}{NA}
+}
+\value{
+ 
+  \item{value}{Reliable detection limit}
+  
+}
 
-\item{object = "calib.fit"}{Extracts RDL value}
-}}
-\seealso{\code{\link{calib.fit}}}}
+\author{Perry Haaland, Elaine McVey, Daniel Samarov}
 
+\examples{
+data(ELISA)
+attach(ELISA)
+model <- calib.fit(Concentration, Response)
+rdl(model)
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
 \keyword{methods}
 

@@ -1,18 +1,14 @@
 \name{fitted-methods}
 \docType{methods}
-\alias{fitted}
-\title{Fitted Method}
-\description{
- Extract fitted values from an object of class calib.fit
-}
+\alias{fitted-methods}
+\alias{fitted,ANY-method}
+\title{Method fitted for calib.fit object.}
+\description{Returns fitted values from a \code{calib.fit} object.}
 \section{Methods}{
 \describe{
 
-\item{object = "ANY"}{Extract fitted values}
+\item{object = "ANY"}{Objects other than \code{calib.fit} for which \code{fitted} can be used.}
 
-\item{object = "calib.fit"}{Extract fitted values from an object of class calib.fit}
+\item{object = "calib.fit"}{\code{calib.fit} object.}
 }}
-\seealso{\code{\link{calib.fit}}}}
-
 \keyword{methods}
-

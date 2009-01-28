@@ -1,23 +1,22 @@
 \name{calib}
 \alias{calib}
-
 \title{Calibration function}
 \description{
 Computes the calibration statistics
 }
 \usage{
-calib(calib.fit.out, y0, conf = 0.9, dilution = 1, 
-samp.names, truth, times, samp.units = "", dose.units = "", 
-dose.name = "", maxit = 1000, toler = 1e-05, 
-rname = "response", extrap = F, xname = x)
+calib(x, y0, conf = 0.9, dilution = 1, samp.names, m = x@m, truth, 
+times, samp.units = "", dose.units = "", dose.name = "", 
+maxit = 1000, toler = 1e-05, rname = "response", extrap = FALSE, xname = x)
 }
-
+%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{calib.fit.out}{Output from calib.fit}
-  \item{y0}{ ~~Describe \code{y0} here~~ }
-  \item{conf}{A vector of mean response values to predict the unknown x}
-  \item{dilution}{Dilution factor}
-  \item{samp.names}{Names of the unknowns}
+  \item{x}{Output from calib.fit.}
+  \item{y0}{Points to be calibrated.}
+  \item{conf}{A vector of mean response values to predict the unknown x.}
+  \item{dilution}{Dilution factor.}
+  \item{samp.names}{Names of the unknowns.}
+  \item{m}{Number of replicates.}
   \item{truth}{Optional argument to provide true concentrations if they are known}
   \item{times}{...}
   \item{samp.units}{Names of the unknowns}
@@ -31,7 +30,7 @@ rname = "response", extrap = F, xname = x)
 }
 
 \value{
-  \item{Estimated.x}{Predicted values of x (for example concentration)}
+   \item{Estimated.x}{Predicted values of x (for example concentration)}
   \item{PredStdErr}{The predicted standard errors of the estimated x's}
   \item{inver.low}{The estimate of the lower confidence limit for the 
   	predicted x's using inverse estimation}
@@ -43,17 +42,14 @@ rname = "response", extrap = F, xname = x)
   	predicted x's using Wald estimation}
   \item{avg.response}{y0 values}
 }
-\references{Haaland and Davidian 1992}
-\author{Perry Haaland, Daniel Samarov, Elaine McVey}
+\references{Davidian and Haaland 1990}
+\author{Perry Haaland, Elaine McVey, Daniel Samarov}
 
+\seealso{\code{\link{calib-class}, \link{calib.fit}, \link{calib.fit-class}, \link{plot}}}
 \examples{
-data(ELISA)
-data(experimentData)
-attach(ELISA)
-attach(experimentData)
-
+data(HPLC)
+attach(HPLC)
 model <- calib.fit(Concentration, Response)
-cal <- calib(model, OD)
-
+calib(model, Concentration)
 }
 \keyword{models}

@@ -1,8 +1,19 @@
 ## ===========================================================================
 ## Generic for calib
 ## ---------------------------------------------------------------------------
-setGeneric("mdc", function(object) standardGeneric("mdc"))
+
 ## ---------------------------------------------------------------------------
-setGeneric("rdl", function(object) standardGeneric("rdl"))
+## Generic for minimum detectable concentration
 ## ---------------------------------------------------------------------------
-setGeneric("loq", function(object) standardGeneric("loq"))
+setGeneric("mdc", function(x,...) standardGeneric("mdc"))
+
+## ---------------------------------------------------------------------------
+## Generic for reliable detection limit
+## ---------------------------------------------------------------------------
+setGeneric("rdl", function(x,...) standardGeneric("rdl"))
+
+## ---------------------------------------------------------------------------
+## Generic for limit of quantization
+## ---------------------------------------------------------------------------
+setGeneric("loq", function(x, ...) standardGeneric("loq"))
+

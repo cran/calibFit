@@ -1,19 +1,15 @@
 \name{residuals-methods}
 \docType{methods}
-\alias{residuals}
-\title{Residuals Method}
-\description{
- Extract residual values from an object of class calib.fit
+\alias{residuals-methods}
+\alias{residuals,ANY-method}
+\title{Methods for Function residuals in Package calib}
+\description{Returns residuals from an object \code{calib.fit}.
 }
 \section{Methods}{
 \describe{
 
-\item{object = "ANY"}{Extract residual values}
+\item{object = "ANY"}{Objects other than \code{calib.fit} object.}
 
-\item{object = "calib.fit"}{Extract residual values from a calib.fit object}
+\item{object = "calib.fit"}{\code{calib.fit} object.}
 }}
-
-\seealso{\code{\link{calib.fit}}}}
-
 \keyword{methods}
-

@@ -1,19 +1,15 @@
 \name{coefficients-methods}
 \docType{methods}
-\alias{coefficients}
-
-\title{Coefficients Method}
+\alias{coefficients-methods}
+\title{Method coefficients for calib package}
 \description{
- Extracts the value of the coefficients from an object of class calib.fit
+Returns coefficient information from a \code{calib.fit} object.
 }
 \section{Methods}{
 \describe{
 
-\item{object = "ANY"}{Extract coefficient value}
+\item{object = "ANY"}{Objects \code{coefficients} applies to other than \code{calib.fit} objects.}
 
-\item{object = "calib.fit"}{Extract coefficient values from a calib.fit object}
+\item{object = "calib.fit"}{\code{calib.fit} object.}
 }}
-\seealso{\code{\link{calib.fit}}}}
-
 \keyword{methods}
-
