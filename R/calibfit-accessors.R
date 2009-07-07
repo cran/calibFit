@@ -57,7 +57,7 @@ setMethod("rdl", signature = "calib.fit",
 					m <- 2
 			}
 			if((x@type == "lin") | (x@type == "quad"))
-				rdl.out <- rdl.lin.pom(x, m = m, conf = conf) 
+				rdl.out <- rdl.lin.pom(x, m = m, conf = conf)
 			else if(x@type == "thpl")
 				rdl.out <- rdl.thpl.pom(x, m = m, conf = conf)
 			else if(x@type == "fpl")

@@ -2,10 +2,10 @@
 %Å‚Å„ÅœÅ”\r
 1 0 obj
 <<
-/CreationDate (D:20090128113948)
-/ModDate (D:20090128113948)
+/CreationDate (D:20090707122835)
+/ModDate (D:20090707122835)
 /Title (R Graphics Output)
-/Producer (R 2.8.1)
+/Producer (R 2.9.0)
 /Creator (R)
 >>
 endobj
@@ -255,7 +255,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -435,7 +435,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 322.78 18.72 Tm (log\(Concentration \(ng/ml\)\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 322.78 18.72 Tm [(log\(Concentr) 10 (ation \(ng/ml\)\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -467,7 +467,7 @@ Q
 endstream
 endobj
 7 0 obj
-8500
+8516
 endobj
 8 0 obj
 <<
@@ -705,10 +705,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 62.42 18.72 Tm (Predicted Value of Mean \(LS\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 62.12 18.72 Tm [(Predicted V) 70 (alue of Mean \(LS\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 59.04 73.44 162.72 371.52 re W n
 0.000 0.000 0.000 RG
@@ -836,10 +836,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 310.75 18.72 Tm (Predicted Value of Mean \(FPL\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 310.45 18.72 Tm [(Predicted V) 70 (alue of Mean \(FPL\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 311.04 73.44 162.72 371.52 re W n
 0.000 0.000 0.000 RG
@@ -853,7 +853,7 @@ Q
 endstream
 endobj
 10 0 obj
-7609
+7641
 endobj
 11 0 obj
 <<
@@ -1085,7 +1085,7 @@ S
 Q q 0.00 0.00 252.00 504.00 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 220.19 Tm (log\(Response\)) Tj
@@ -1314,16 +1314,16 @@ S
 Q q 252.00 0.00 252.00 504.00 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 334.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 334.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 217.95 Tm (sqrt\(Response\)) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 217.95 Tm [(sqr) -40 (t\(Response\))] TJ
 ET
 Q
 endstream
 endobj
 13 0 obj
-9389
+9414
 endobj
 14 0 obj
 <<
@@ -1558,7 +1558,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 73.85 18.72 Tm (Log\(LS predicted values\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 73.85 18.72 Tm [(Log\(LS predicted v) 25 (alues\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 187.84 Tm (Log\(absolute LS residuals\)) Tj
@@ -1739,7 +1739,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 322.19 18.72 Tm (Log\(FPL predicted values\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 322.19 18.72 Tm [(Log\(FPL predicted v) 25 (alues\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 184.17 Tm (Log\(absolute FPL residuals\)) Tj
@@ -1772,7 +1772,7 @@ Q
 endstream
 endobj
 16 0 obj
-8528
+8544
 endobj
 17 0 obj
 <<
@@ -2011,10 +2011,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 93.10 18.72 Tm (Fitted Values \(LS\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 92.80 18.72 Tm [(Fitted V) 70 (alues \(LS\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 311.04 73.44 162.72 371.52 re W n
 Q q 311.04 73.44 162.72 371.52 re W n
@@ -2142,16 +2142,16 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 341.44 18.72 Tm (Fitted Values \(FPL\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 341.14 18.72 Tm [(Fitted V) 70 (alues \(FPL\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q
 endstream
 endobj
 19 0 obj
-7577
+7609
 endobj
 20 0 obj
 <<
@@ -2392,7 +2392,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 98.39 4.32 Tm (Without POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -2637,7 +2637,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 358.73 4.32 Tm (With POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -3013,7 +3013,7 @@ Q
 endstream
 endobj
 22 0 obj
-15593
+15609
 endobj
 23 0 obj
 <<
@@ -3091,7 +3091,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 98.39 4.32 Tm (Without POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -4136,7 +4136,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 358.73 4.32 Tm (With POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -5123,7 +5123,7 @@ Q
 endstream
 endobj
 25 0 obj
-34825
+34841
 endobj
 26 0 obj
 <<
@@ -5188,7 +5188,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 134.46 47.52 Tm (Sample) Tj
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm (Calibrated  concentration) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm [(Calibr) 10 (ated  concentr) 10 (ation)] TJ
 ET
 Q q 87.84 102.24 133.92 313.92 re W n
 0.827 0.827 0.827 RG
@@ -5650,13 +5650,13 @@ ET
 Q q 87.84 102.24 133.92 313.92 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 95.01 401.49 Tm (x = response out of range) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 95.01 401.49 Tm [(x = response out of r) 10 (ange)] TJ
 ET
 Q
 endstream
 endobj
 28 0 obj
-12022
+12044
 endobj
 29 0 obj
 <<
@@ -5725,7 +5725,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 134.46 47.52 Tm (Sample) Tj
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm (Calibrated  concentration) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm [(Calibr) 10 (ated  concentr) 10 (ation)] TJ
 ET
 Q q 87.84 102.24 133.92 313.92 re W n
 0.827 0.827 0.827 RG
@@ -5907,13 +5907,13 @@ ET
 Q q 87.84 102.24 133.92 313.92 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 99.85 401.49 Tm (x = response out of range) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 99.85 401.49 Tm [(x = response out of r) 10 (ange)] TJ
 ET
 Q
 endstream
 endobj
 31 0 obj
-5299
+5321
 endobj
 32 0 obj
 <<
@@ -6156,7 +6156,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -6336,7 +6336,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 322.78 18.72 Tm (log\(Concentration \(ng/ml\)\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 322.78 18.72 Tm [(log\(Concentr) 10 (ation \(ng/ml\)\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -6368,7 +6368,7 @@ Q
 endstream
 endobj
 34 0 obj
-8537
+8553
 endobj
 35 0 obj
 <<
@@ -6606,10 +6606,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 62.42 18.72 Tm (Predicted Value of Mean \(LS\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 62.12 18.72 Tm [(Predicted V) 70 (alue of Mean \(LS\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 59.04 73.44 162.72 371.52 re W n
 0.000 0.000 0.000 RG
@@ -6737,10 +6737,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 310.75 18.72 Tm (Predicted Value of Mean \(FPL\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 310.45 18.72 Tm [(Predicted V) 70 (alue of Mean \(FPL\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 311.04 73.44 162.72 371.52 re W n
 0.000 0.000 0.000 RG
@@ -6754,7 +6754,7 @@ Q
 endstream
 endobj
 37 0 obj
-7609
+7641
 endobj
 38 0 obj
 <<
@@ -6986,7 +6986,7 @@ S
 Q q 0.00 0.00 252.00 504.00 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 82.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 220.19 Tm (log\(Response\)) Tj
@@ -7215,16 +7215,16 @@ S
 Q q 252.00 0.00 252.00 504.00 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 334.78 18.72 Tm (Concentration \(ng/ml\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 334.78 18.72 Tm [(Concentr) 10 (ation \(ng/ml\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 217.95 Tm (sqrt\(Response\)) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 217.95 Tm [(sqr) -40 (t\(Response\))] TJ
 ET
 Q
 endstream
 endobj
 40 0 obj
-9389
+9414
 endobj
 41 0 obj
 <<
@@ -7459,7 +7459,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 73.85 18.72 Tm (Log\(LS predicted values\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 73.85 18.72 Tm [(Log\(LS predicted v) 25 (alues\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 187.84 Tm (Log\(absolute LS residuals\)) Tj
@@ -7640,7 +7640,7 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 322.19 18.72 Tm (Log\(FPL predicted values\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 322.19 18.72 Tm [(Log\(FPL predicted v) 25 (alues\))] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 184.17 Tm (Log\(absolute FPL residuals\)) Tj
@@ -7673,7 +7673,7 @@ Q
 endstream
 endobj
 43 0 obj
-8528
+8544
 endobj
 44 0 obj
 <<
@@ -7912,10 +7912,10 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 105.01 469.45 Tm (HPLC data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 93.10 18.72 Tm (Fitted Values \(LS\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 92.80 18.72 Tm [(Fitted V) 70 (alues \(LS\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q q 311.04 73.44 162.72 371.52 re W n
 Q q 311.04 73.44 162.72 371.52 re W n
@@ -8043,16 +8043,16 @@ BT
 /F3 1 Tf 14.00 0.00 0.00 14.00 355.45 469.45 Tm (ELISA data) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 341.44 18.72 Tm (Fitted Values \(FPL\)) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 341.14 18.72 Tm [(Fitted V) 70 (alues \(FPL\))] TJ
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm (Standardized Residuals) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 195.93 Tm [(Standardiz) 15 (ed Residuals)] TJ
 ET
 Q
 endstream
 endobj
 46 0 obj
-7577
+7609
 endobj
 47 0 obj
 <<
@@ -8293,7 +8293,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 98.39 4.32 Tm (Without POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -8538,7 +8538,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 358.73 4.32 Tm (With POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -8914,7 +8914,7 @@ Q
 endstream
 endobj
 49 0 obj
-15593
+15609
 endobj
 50 0 obj
 <<
@@ -8992,7 +8992,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 98.39 4.32 Tm (Without POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 103.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 232.19 Tm (Response) Tj
@@ -10037,7 +10037,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 358.73 4.32 Tm (With POM fit) Tj
 ET
 BT
-/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm (Concentration) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 355.11 18.72 Tm [(Concentr) 10 (ation)] TJ
 ET
 BT
 /F2 1 Tf 0.00 12.00 -12.00 0.00 264.96 232.19 Tm (Response) Tj
@@ -11024,7 +11024,7 @@ Q
 endstream
 endobj
 52 0 obj
-34825
+34841
 endobj
 53 0 obj
 <<
@@ -11089,7 +11089,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 134.46 47.52 Tm (Sample) Tj
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm (Calibrated  concentration) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm [(Calibr) 10 (ated  concentr) 10 (ation)] TJ
 ET
 Q q 87.84 102.24 133.92 313.92 re W n
 0.827 0.827 0.827 RG
@@ -11551,13 +11551,13 @@ ET
 Q q 87.84 102.24 133.92 313.92 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 95.01 401.49 Tm (x = response out of range) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 95.01 401.49 Tm [(x = response out of r) 10 (ange)] TJ
 ET
 Q
 endstream
 endobj
 55 0 obj
-12022
+12044
 endobj
 56 0 obj
 <<
@@ -11626,7 +11626,7 @@ BT
 /F2 1 Tf 12.00 0.00 0.00 12.00 134.46 47.52 Tm (Sample) Tj
 ET
 BT
-/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm (Calibrated  concentration) Tj
+/F2 1 Tf 0.00 12.00 -12.00 0.00 41.76 192.62 Tm [(Calibr) 10 (ated  concentr) 10 (ation)] TJ
 ET
 Q q 87.84 102.24 133.92 313.92 re W n
 0.827 0.827 0.827 RG
@@ -11808,13 +11808,13 @@ ET
 Q q 87.84 102.24 133.92 313.92 re W n
 BT
 0.000 0.000 0.000 rg
-/F2 1 Tf 12.00 0.00 0.00 12.00 99.85 401.49 Tm (x = response out of range) Tj
+/F2 1 Tf 12.00 0.00 0.00 12.00 99.85 401.49 Tm [(x = response out of r) 10 (ange)] TJ
 ET
 Q
 endstream
 endobj
 58 0 obj
-5299
+5321
 endobj
 3 0 obj
 <<
@@ -11884,66 +11884,66 @@ xref
 0000000000 65535 f 
 0000000021 00000 n 
 0000000163 00000 n 
-0000221775 00000 n 
-0000221977 00000 n 
+0000222169 00000 n 
+0000222371 00000 n 
 0000000212 00000 n 
 0000000292 00000 n 
-0000008845 00000 n 
-0000008865 00000 n 
-0000008945 00000 n 
-0000016608 00000 n 
-0000016629 00000 n 
-0000016711 00000 n 
-0000026155 00000 n 
-0000026176 00000 n 
-0000026258 00000 n 
-0000034841 00000 n 
-0000034862 00000 n 
-0000034944 00000 n 
-0000042576 00000 n 
-0000042597 00000 n 
-0000042679 00000 n 
-0000058327 00000 n 
-0000058349 00000 n 
-0000058431 00000 n 
-0000093311 00000 n 
-0000093333 00000 n 
-0000093415 00000 n 
-0000105492 00000 n 
-0000105514 00000 n 
-0000105596 00000 n 
-0000110950 00000 n 
-0000110971 00000 n 
-0000111053 00000 n 
-0000119645 00000 n 
-0000119666 00000 n 
-0000119748 00000 n 
-0000127412 00000 n 
-0000127433 00000 n 
-0000127515 00000 n 
-0000136959 00000 n 
-0000136980 00000 n 
-0000137062 00000 n 
-0000145645 00000 n 
-0000145666 00000 n 
-0000145748 00000 n 
-0000153380 00000 n 
-0000153401 00000 n 
-0000153483 00000 n 
-0000169131 00000 n 
-0000169153 00000 n 
-0000169235 00000 n 
-0000204115 00000 n 
-0000204137 00000 n 
-0000204219 00000 n 
-0000216296 00000 n 
-0000216318 00000 n 
-0000216400 00000 n 
-0000221754 00000 n 
-0000222082 00000 n 
-0000222177 00000 n 
-0000222261 00000 n 
-0000222359 00000 n 
+0000008861 00000 n 
+0000008881 00000 n 
+0000008961 00000 n 
+0000016656 00000 n 
+0000016677 00000 n 
+0000016759 00000 n 
+0000026228 00000 n 
+0000026249 00000 n 
+0000026331 00000 n 
+0000034930 00000 n 
+0000034951 00000 n 
+0000035033 00000 n 
+0000042697 00000 n 
+0000042718 00000 n 
+0000042800 00000 n 
+0000058464 00000 n 
+0000058486 00000 n 
+0000058568 00000 n 
+0000093464 00000 n 
+0000093486 00000 n 
+0000093568 00000 n 
+0000105667 00000 n 
+0000105689 00000 n 
+0000105771 00000 n 
+0000111147 00000 n 
+0000111168 00000 n 
+0000111250 00000 n 
+0000119858 00000 n 
+0000119879 00000 n 
+0000119961 00000 n 
+0000127657 00000 n 
+0000127678 00000 n 
+0000127760 00000 n 
+0000137229 00000 n 
+0000137250 00000 n 
+0000137332 00000 n 
+0000145931 00000 n 
+0000145952 00000 n 
+0000146034 00000 n 
+0000153698 00000 n 
+0000153719 00000 n 
+0000153801 00000 n 
+0000169465 00000 n 
+0000169487 00000 n 
+0000169569 00000 n 
+0000204465 00000 n 
+0000204487 00000 n 
+0000204569 00000 n 
+0000216668 00000 n 
+0000216690 00000 n 
+0000216772 00000 n 
+0000222148 00000 n 
+0000222476 00000 n 
+0000222571 00000 n 
+0000222655 00000 n 
+0000222753 00000 n 
 trailer
 <<
 /Size 63
@@ -11951,5 +11951,5 @@ trailer
 /Root 2 0 R
 >>
 startxref
-222462
+222856
 %%EOF

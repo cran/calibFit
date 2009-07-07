@@ -163,7 +163,7 @@ calib.fit <- function(x, y,
 	dFrame <- data.frame(x = x, y = y)
 	
 	## The non-linear fit is performed
-
+	
 	for(i in 1:length(type)){
 		
 		## Model information
@@ -368,10 +368,10 @@ calib.fit <- function(x, y,
 		
 		out@mdc <- mdc(out, m = m, conf = conf)
 		out@rdl <- rdl(out, m = m, conf = conf)
-		
+#		browser()
 		## Doing a check on the RDL. If it falls outside the x range then
 		## a warning is produced.
-		if(!is.null(out@rdl)){
+		if(!is.null(out@rdl) & !is.na(out@rdl)){
 			if(out@rdl > max(x))
 				out@rdlwarn <- "RDL outside range of values"
 			else
@@ -485,7 +485,7 @@ thpl.model <- function(x, b1, b2, b3, w = 1, logParm = TRUE)
 	.grad[, "b1"] <- w * (1/.den)
 	.grad[, "b2"] <- w * (1 - 1/.den)
 #	.grad[, "b3"] <- w * ((b1 - b2) * (.a/b3))/.den^2
-
+	
 	if(!logParm) {
 		if(any(b3 <= 0))
 			stop("Warning, b3 is less than or equal to zero.")
@@ -494,7 +494,7 @@ thpl.model <- function(x, b1, b2, b3, w = 1, logParm = TRUE)
 	else {
 		.grad[, "b3"] <- w * (((b1 - b2) * .a)/.den^2)
 	}
-		
+	
 	attr(.value, "gradient") <- .grad
 	.value
 }
