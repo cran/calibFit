@@ -9,11 +9,11 @@ Plotting method for \code{\link{calib.fit}} and \code{\link{calib}}Provides plot
 \section{Methods}{
 \describe{
 
-\item{x = "ANY", y = "ANY"}{ ~~describe this method here }
+\item{x = "ANY", y = "ANY"}{Objects other than \code{calib.fit} and \code{calib} for which \code{plot} can be used.}
 
-\item{x = "calib", y = "missing"}{ ~~describe this method here }
+\item{x = "calib", y = "missing"}{\code{calib} object.}
 
-\item{x = "calib.fit", y = "missing"}{ ~~describe this method here }
+\item{x = "calib.fit", y = "missing"}{\code{calib.fit} object.}
 }}
 \keyword{methods}
 

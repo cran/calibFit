@@ -1,6 +1,6 @@
 Package: calib
-Version: 2.0.1
-Date: 07-07-09
+Version: 2.0.2
+Date: 08-30-2010
 Title: Statistical tool for calibration of plate based bioassays
 Author: Daniel Samarov <daniel_samarov@bd.com>, Perry Haaland
         <perry_haaland@bd.com>, Elaine McVey <elaine_mcvey@bd.com>
@@ -13,6 +13,6 @@ Description: Provides basic S4 data structures and routines for
 License: GPL-2
 URL: http://www.bd.com
 biocViews: Statistics, Infrastructure, CellBasedAssays
-Packaged: 2009-07-07 16:28:43 UTC; samarov
+Packaged: 2011-01-25 07:40:43 UTC; hornik
 Repository: CRAN
-Date/Publication: 2009-07-18 15:40:26
+Date/Publication: 2011-01-25 07:44:51

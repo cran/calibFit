@@ -1,27 +1,49 @@
-# TODO: Add comment
+##################################################################################
+## unit tests are setup to run with R CMD Check
+## results are for calib 2.02
 # 
-# Author: samarov
+# Author: samarov, haaland
 ###############################################################################
-load("inst/unitTests/data/RUnitData.rda")
-ELISA <- read.table("data/ELISA.txt", header = TRUE)
-HPLC <- read.table("data/HPLC.txt", header = TRUE)
+load("data/RUnitcalibFit.rda")
+ELISA <- read.table("../../data/ELISA.txt", header = TRUE)
+HPLC <- read.table("../../data/HPLC.txt", header = TRUE)
 library(RUnit)
 
-test.calibFit <- function(){
-	
-	mod.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl")
-	mod.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl.pom")
-	mod.log.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl")
-	mod.log.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl.pom")
-	mod.thpl <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl")
-	mod.thpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl.pom")
-	mod.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl")
-	mod.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl.pom")
-	mod.log.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl")
-	mod.log.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl.pom")
-	mod.lin <- calib.fit(HPLC[,1], HPLC[,2], type = "lin.pom")
-	mod.quad <- calib.fit(HPLC[,1], HPLC[,2], type = "quad.pom")
-	
+####################################################################
+## this is the setup for the RUnit testing and would happen only once
+#model.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl")
+#model.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl.pom")
+#model.log.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl")
+#model.log.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl.pom")
+#model.thpl <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl")
+#model.thpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl.pom")
+#model.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl")
+#model.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl.pom")
+#model.log.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl")
+#model.log.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl.pom")
+#model.lin <- calib.fit(HPLC[,1], HPLC[,2], type = "lin.pom")
+#model.quad <- calib.fit(HPLC[,1], HPLC[,2], type = "quad.pom")
+#save(model.fpl,model.fpl.pom,model.log.fpl,model.log.fpl.pom,model.thpl,model.thpl.pom,
+#		model.tpl,model.tpl.pom,model.log.tpl,model.log.tpl.pom,model.lin,model.quad,
+#		file="data/RUnitcalibFit.rda")
+
+
+## the test functions use these results so evaluate outside
+mod.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl")
+mod.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl.pom")
+mod.log.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl")
+mod.log.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl.pom")
+mod.thpl <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl")
+mod.thpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl.pom")
+mod.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl")
+mod.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl.pom")
+mod.log.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl")
+mod.log.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl.pom")
+mod.lin <- calib.fit(HPLC[,1], HPLC[,2], type = "lin.pom")
+mod.quad <- calib.fit(HPLC[,1], HPLC[,2], type = "quad.pom")
+
+
+test.calibFit <- function(){	
 	## fpl
 	checkEqualsNumeric(mod.fpl@coefficients, model.fpl@coefficients, tolerance = 1e-2)
 	checkEqualsNumeric(mod.fpl@se.coefficients, model.fpl@se.coefficients, tolerance = 1e-2)

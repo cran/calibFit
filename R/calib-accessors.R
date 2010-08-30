@@ -8,7 +8,16 @@
 ##-----------------------------------------------------------------------------
 setMethod("print", signature = "calib", function(x,...){
 			cat("\nAn object of class calib\n")
-#			cat("Predicted Stadandard Error:",x@PredStdErr,"\n")
+			
+			df = data.frame(Average.Response = x@avg.response,
+					Estimated.Concentration = x@Estimated.x,
+					Predicted.Standard.Error=x@PredStdErr,
+					Inverse.Lower.CI=x@inver.low,
+					Inverse.Upper.CI=x@inver.up,
+					Wald.Lower.CI=x@wald.low,
+					Wald.Upper.CI=x@wald.up)
+			print(df)
+#			cat("Predicted Standard Error:",x@PredStdErr,"\n")
 #			ci.df <- data.frame(rbind(c(x@inver.low,x@inver.up),
 #							c(x@wald.low,x@wald.up)))
 #			names(ci.df) <- c("Lower","Upper")

@@ -80,9 +80,10 @@ calib.fit <- function(x, y,
 		m, cv = 0.2, conf = 0.95, 
 		mx = 50, lof.calc = T, lowLim = 1e-3,
 		type=c("log.fpl.pom","fpl.pom","log.fpl","fpl","log.tpl.pom",
-				"tpl.pom","log.tpl","tpl","quad.pom","log.thpl.pom",
-				"thpl.pom","log.thpl","thpl","lin.pom"))
+				"tpl.pom","log.tpl","tpl","log.thpl.pom",
+				"thpl.pom","log.thpl","thpl","quad.pom","quad","lin.pom","lin"))
 {
+#	browser()
 	####################################################################
 	## Function for fitting a standard curve to the data. 			  ##
 	##                                                                ##
@@ -104,15 +105,15 @@ calib.fit <- function(x, y,
 	####################################################################
 	
 	require(nlme)
-	
 	## Setting x values less than zero equal to a small positive constant to avoid
 	## fitting issues.
 	x[x == 0] <- lowLim
 	
 	## Available models
+	# TODO: Make log, model, pom three separate choices, instead of combos? - parses them anyway
 	availableModels <- c("log.fpl.pom","fpl.pom","log.fpl","fpl","log.tpl.pom",
-			"tpl.pom","log.tpl","tpl","quad.pom","log.thpl.pom",
-			"thpl.pom","log.thpl","thpl","lin.pom")
+			"tpl.pom","log.tpl","tpl","quad.pom","quad","log.thpl.pom",
+			"thpl.pom","log.thpl","thpl","lin.pom","lin")
 	## Checking to make sure only valid model have been selected
 	if(any(!(type %in% availableModels)))
 		stop(paste("'",paste(type[!(type %in% availableModels)], collapse = ", "),"'", 
@@ -123,6 +124,7 @@ calib.fit <- function(x, y,
 	## used. The syntax for the input statement of the model needs to
 	## be as shown in the 'type' argument above. This is more for convenience purposes
 	## regarding the automatic model selection procedure in R. 
+	## logParm, modelType, and pom get set here
 	modelSelect <- t(sapply(strsplit(type,"\\."), function(x){
 						## If a log parameterized model is to be fit 'log' should always come first
 						## in the statement, i.e. log.x.x
@@ -175,10 +177,15 @@ calib.fit <- function(x, y,
 		sVals <- startVals(x, y, b1start, b2start, b3start, b4start, logParm = logParm)
 		
 		## Should a power of the mean variance model be used
-		if(pom)
+		if(pom) {
 			wts <- varPower()
-		else
+		} else
 			wts <- NULL
+		
+		## TODO: combine common elements of all the if{} sections by model below outside the if segments - reduce duplicate code
+		## TODO: to reduce duplicate blocks, use parse/eval to set model statement specifically by type
+		## TODO: use logParm directly instead of setting it in the if/else statement within each large if block - set lowLim either way?
+		## TODO: check to see if try-error class could be looked at more specifically -- i.e. make sure it fails because it's not possible to fit, not for other reason
 		
 		## Fit a four parameter logistic model to the data	
 		if(modelType == "fpl"){
@@ -199,9 +206,10 @@ calib.fit <- function(x, y,
 								control = nls.control(maxiter = mx)), TRUE)
 			}
 			## Check to see if we were able to fit a model to the data. If not keep cycling through.
+#			browser()
 			if(all(class(model) != "try-error")){
 				if(i != 1)
-					cat(paste("Warning", type[1], "produced error, used", type[i], "instead"), "\n")
+					cat(paste("Warning", type[1], "produced error (", model[1], "), used", type[i], "instead"), "\n")
 				break
 			}
 		}
@@ -229,7 +237,7 @@ calib.fit <- function(x, y,
 			## Check to see if we were able to fit a model to the data. If not keep cycling through.
 			if(all(class(model) != "try-error")){
 				if(i != 1)
-					cat(paste("Warning", type[1], "produced error, used", type[i], "instead"), "\n")
+					cat(paste("Warning", type[1], "produced error (", model[1], "), used", type[i], "instead"), "\n")
 				break
 			}
 		}
@@ -238,14 +246,16 @@ calib.fit <- function(x, y,
 			## For the two parameter logistic model b1 and b2 are fixed. If values are not provided 
 			## the values will be set to the starting value estimates calculated from the startVals
 			## function.
-			if(missing(b1start))
+			if(missing(b1start)) {
 				b1 <- sVals[[1]] 
-			else
+			} else {
 				b1 <- b1start
-			if(missing(b2start))
+			}
+			if(missing(b2start)) {
 				b2 <- sVals[[2]]
-			else
+			} else {
 				b2 <- b2start
+			}
 			## The starting values for the tpl model. Only b3 and b4 are estimated.
 			sVals.i <- sVals[3:4]
 			dFrame.i <- dFrame
@@ -270,7 +280,7 @@ calib.fit <- function(x, y,
 			## Check to see if we were able to fit a model to the data. If not keep cycling through.
 			if(all(class(model) != "try-error")){
 				if(i != 1)
-					cat(paste("Warning", type[1], "produced error, used", type[i], "instead"), "\n")
+					cat(paste("Warning", type[1], "produced error (", model[1], "), used", type[i], "instead"), "\n")
 				break
 			}
 		}
@@ -283,7 +293,7 @@ calib.fit <- function(x, y,
 							control = glsControl(maxIter = mx)), TRUE)
 			if(all(class(model) != "try-error")){
 				if(i != 1)
-					cat(paste("Warning", type[1], "produced error, used", type[i], "instead"), "\n")
+					cat(paste("Warning", type[1], "produced error (", model[1], "), used", type[i], "instead"), "\n")
 				break
 			}
 		}
@@ -293,7 +303,7 @@ calib.fit <- function(x, y,
 							control = glsControl(maxIter = mx)), TRUE)
 			if(all(class(model) != "try-error")){
 				if(i != 1)
-					cat(paste("Warning", type[1], "produced error, used", type[i], "instead"), "\n")
+					cat(paste("Warning", type[1], "produced error (", model[1], "), used", type[i], "instead"), "\n")
 				break
 			}
 			
@@ -308,10 +318,11 @@ calib.fit <- function(x, y,
 	
 	## Getting theta
 	theta <- coef(model$modelStruct)
-	if(is.null(theta)) 
-		theta <- 0 
-	else 
+	if(is.null(theta)) {
+		theta <- 0  
+	} else {
 		theta <- theta
+	}
 	
 	## If the model fit was tpl only b3 and b4 are fit, need to also return b1 and b2.
 	if(modelType == "tpl"){
@@ -372,13 +383,14 @@ calib.fit <- function(x, y,
 		## Doing a check on the RDL. If it falls outside the x range then
 		## a warning is produced.
 		if(!is.null(out@rdl) & !is.na(out@rdl)){
-			if(out@rdl > max(x))
+			if(out@rdl > max(x)) {
 				out@rdlwarn <- "RDL outside range of values"
-			else
+			} else {
 				out@rdlwarn <- "RDL within range of values"
-		}
-		else
+			}
+		} else {
 			out@rdlwarn <- "RDL returned NULL"
+		}
 		
 		out@loq <- loq(out)
 		out@conf.level <- conf
@@ -394,205 +406,3 @@ calib.fit <- function(x, y,
 	
 	return(out)
 }
-
-
-fpl.model <- function(x, b1, b2, b3, b4, w = 1, logParm = TRUE){
-	####################################################################
-	## The 4 Parameter Logistic Model used in Calibration Analysis    ##
-	## modified by Matthew Mitchell on 3/11/03                        ##
-	##                                                                ##
-	## input variables:                                               ##
-	##  x: the independent variable (usually dosage here)             ##
-	##  b1,b2,b3,b4: values used in the FPL fit                       ##
-	##  w: weights.  In OLS these are 1.                              ##
-	##  parm:  If parm=1 the nonlinear function fitted is             ##
-	##        y = b2 + (b1-b2)/(1 + (x/b3)^b4)                        ##
-	##        If parm=2 the nonlinear function fitted is              ##
-	##        y = b2 + (b1-b2)/(1 + exp(b4(logx - b3)),               ##       
-	##        which is reparametrization of the other form            ##
-	##        since b3 from alt=T is log(b3 from alt=F).              ##
-	##                                                                ##
-	## This function is called when doing the nls fitting with        ##
-	##  the fpl an dfpl.pom functions.                                ##
-	##                                                                ## 
-	## Original comments are ###, added are ##                        ##
-	####################################################################
-	if(length(b1) == 4) {
-		b2 <- b1[2]
-		b3 <- b1[3]
-		b4 <- b1[4]
-		b1 <- b1[1]
-	}
-	if(!logParm) {
-		.a <- ifelse(x <= 0, 0, (x/b3)^b4)
-		.den <- 1 + .a
-		
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	else {
-		.a <- ifelse(x <= 0, 0, exp(b4 * (log(x) - b3)))
-		.den <- 1 + .a
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	.grad <- array(.value, c(length(.value), 4), list(NULL, c("b1", 
-							"b2", "b3", "b4"))) 
-	
-	.grad[, "b1"] <- w * (1/.den)
-	.grad[, "b2"] <- w * (1 - 1/.den)
-	if(!logParm) {
-		if(any(b3 <= 0))
-			stop("Warning, b3 is less than or equal to zero.")
-		.grad[, "b3"] <- w * (((b1 - b2) * (b4/b3) * .a)/.den^2)
-		.grad[, "b4"] <- ifelse(x == 0, 0, (w * ( - (b1 - b2) * 
-								.a * log(ifelse(x/b3 > 0, x/b3, NA))))/.den^2)
-	}
-	else {
-		.grad[, "b3"] <- w * (((b1 - b2) * b4 * .a)/.den^2)
-		.grad[, "b4"] <- ifelse(x == 0, 0, w * ((( - (b1 - b2) * 
-									.a * (log(ifelse(x > 0, x, NA)) - b3))/.den^2))
-		)
-	}
-	attr(.value, "gradient") <- .grad
-	.value
-}
-
-
-
-thpl.model <- function(x, b1, b2, b3, w = 1, logParm = TRUE)
-###################################################################
-## The 3 parameter logistic model used in calibration analysis
-##
-###################################################################
-{
-	if(length(b1) == 3) {
-		b2 <- b1[2]
-		b3 <- b1[3]
-		b1 <- b1[1] 
-	}
-	if(!logParm) {
-		.a <- ifelse(x <= 0, 0, (x/b3))
-		.den <- 1 + .a
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	else {
-		.a <- ifelse(x <= 0, 0, exp(log(x) - b3))
-		.den <- 1 + .a
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	.grad <- array(.value, c(length(.value), 3), list(NULL, c("b1", 
-							"b2", "b3"))) 
-	## rownames are NULL, columnames are are the parameter names
-	.grad[, "b1"] <- w * (1/.den)
-	.grad[, "b2"] <- w * (1 - 1/.den)
-#	.grad[, "b3"] <- w * ((b1 - b2) * (.a/b3))/.den^2
-	
-	if(!logParm) {
-		if(any(b3 <= 0))
-			stop("Warning, b3 is less than or equal to zero.")
-		.grad[, "b3"] <- w * (((b1 - b2) * (1/b3) * .a)/.den^2)
-	}
-	else {
-		.grad[, "b3"] <- w * (((b1 - b2) * .a)/.den^2)
-	}
-	
-	attr(.value, "gradient") <- .grad
-	.value
-}
-
-
-
-tpl.model <- function(x, b1, b2, b3, b4, w = 1, logParm = TRUE){
-	####################################################################
-	## The 4 Parameter Logistic Model used in Calibration Analysis    ##
-	## modified by Matthew Mitchell on 3/11/03                        ##
-	##                                                                ##
-	## input variables:                                               ##
-	##  x: the independent variable (usually dosage here)             ##
-	##  b1,b2,b3,b4: values used in the FPL fit                       ##
-	##  w: weights.  In OLS these are 1.                              ##
-	##  parm:  If parm=1 the nonlinear function fitted is             ##
-	##        y = b2 + (b1-b2)/(1 + (x/b3)^b4)                        ##
-	##        If parm=2 the nonlinear function fitted is              ##
-	##        y = b2 + (b1-b2)/(1 + exp(b4(logx - b3)),               ##       
-	##        which is reparametrization of the other form            ##
-	##        since b3 from alt=T is log(b3 from alt=F).              ##
-	##                                                                ##
-	## This function is called when doing the nls fitting with        ##
-	##  the fpl an dfpl.pom functions.                                ##
-	##                                                                ## 
-	## Original comments are ###, added are ##                        ##
-	####################################################################
-	
-	if(length(b1) == 4) {
-		b2 <- b1[2]
-		b3 <- b1[3]
-		b4 <- b1[4]
-		b1 <- b1[1]
-	}
-	## If we are not working on the log scale
-	if(!logParm) {
-		.a <- ifelse(x <= 0, 0, (x/b3)^b4)
-		.den <- 1 + .a
-		
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	## If we are working on the log scale
-	else {
-		.a <- ifelse(x <= 0, 0, exp(b4 * (log(x) - b3)))
-		.den <- 1 + .a
-		.value <- w * ((b1 - b2)/.den + b2)
-	}
-	.grad <- array(.value, c(length(.value), 2), list(NULL, 
-					c("b3", "b4"))) ## rownames are NULL, columnames are
-	## are the parameter names
-	if(!logParm) {
-		if(any(b3 <= 0))
-			stop("Warning, b3 is less than or equal to zero.")
-		.grad[, "b3"] <- w * (((b1 - b2) * (b4/b3) * .a)/.den^2)
-		.grad[, "b4"] <- ifelse(x == 0, 0, (w * ( - (b1 - b2) * 
-								.a * log(ifelse(x > 0, x/b3, NA))))/.den^2)
-	}
-	else {
-		.grad[, "b3"] <- w * (((b1 - b2) * b4 * .a)/.den^2)
-		.grad[, "b4"] <- ifelse(x == 0, 0, w * ((( - (b1 - b2) * 
-									.a * (log(ifelse(x > 0, x, NA)) - b3))/.den^2)))
-	}
-	attr(.value, "gradient") <- .grad
-	.value
-}
-
-
-lin.model <- function(x, beta, w = 1, type)
-{
-	##################################################
-	## called for the linear model fit in lin.pom   ##
-	##                                              ##
-	## header added by Matthew Mitchell on 3/18/03  ##
-	## actually I don't this is used? 3/28/03 MM    ##
-	##################################################
-	
-	if(type == "lin") {
-		.value <- beta[1] + beta[2] * x
-		.grad <- array(.value, c(length(.value), 2), list(NULL, 
-						c("b1", "b2")))
-		.grad[, "b1"] <- w
-		.grad[, "b2"] <- w * x
-	}
-	
-	if(type == "quad") {
-		.value <- beta[1] + beta[2] * x + beta[3] * x * x
-		.grad <- array(.value, c(length(.value), 3), list(NULL, 
-						c("b1", "b2", "b3")))
-		.grad[, "b1"] <- w
-		.grad[, "b2"] <- w * x
-		.grad[, "b3"] <- w * x * x
-	}
-	attr(.value, "gradient") <- .grad
-	.value
-}
-
-
-##===========================================================================
-## This is a function that will be used for generalized cross validation in
-## estimating the error bounds of the rdl
-#gcvCalib <- function(x, y)

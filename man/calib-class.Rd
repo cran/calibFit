@@ -22,8 +22,6 @@ Contains results from performing calibration.
     \item{\code{inver.up}:}{Estimated upper confidence intervals using inverse method}
     \item{\code{wald.low}:}{Esimated lower confidence interval using Wald intervals}
     \item{\code{wald.up}:}{Estimated upper confidence interval using Wald intervals}
-    \item{\code{waldl.low}:}{Internal use}
-    \item{\code{waldl.up}:}{Internal use}
     \item{\code{avg.response}:}{y0 values}
     \item{\code{dilution}:}{Dilution factors}
     \item{\code{oor}:}{Values which fall out of range of assay}

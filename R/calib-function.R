@@ -1,3 +1,7 @@
+##############################################################################################################
+## all of the functions required for calibration
+##################################################################################################################
+
 calib <- function(x,y0,conf=.9, dilution=1, samp.names, m = x@m,
 		truth, times, samp.units="", dose.units = "", dose.name = "", maxit = 1000,
 		toler = 1e-05, rname="response", extrap = FALSE, xname = x){
@@ -10,7 +14,7 @@ calib <- function(x,y0,conf=.9, dilution=1, samp.names, m = x@m,
 				m = m, dilution = dilution, samp.names, truth, 
 				times, samp.units = samp.units, dose.units = dose.units, 
 				dose.name = dose.name, 
-				extrap = F, 
+				extrap = extrap, 
 				rname = rname, xname = xname)
 	}
 	else if(x@type == "thpl"){
@@ -18,7 +22,7 @@ calib <- function(x,y0,conf=.9, dilution=1, samp.names, m = x@m,
 				m = m, dilution = dilution, samp.names, truth, 
 				times, samp.units = samp.units, dose.units = dose.units, 
 				dose.name = dose.name, 
-				extrap = F,
+				extrap = FALSE,
 				rname = rname, xname = xname)
 	}
 	else if(x@type == "fpl"){
@@ -26,7 +30,7 @@ calib <- function(x,y0,conf=.9, dilution=1, samp.names, m = x@m,
 				m = m, dilution = dilution, samp.names, truth, 
 				times, samp.units = samp.units, dose.units = dose.units, 
 				dose.name = dose.name, 
-				extrap = F,
+				extrap = FALSE,
 				rname = rname, xname = xname)
 	}
 	else if(x@type == "tpl"){
@@ -34,7 +38,7 @@ calib <- function(x,y0,conf=.9, dilution=1, samp.names, m = x@m,
 				m = m, dilution = dilution, samp.names, truth,
 				times, samp.units = samp.units, dose.units = dose.units,
 				dose.name = dose.name,
-				extrap = F,
+				extrap = FALSE,
 				rname = rname, xname = xname)
 	}
 	else
@@ -70,8 +74,9 @@ calib.fpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	##                                                                           ##
 	## added extrap option as in calib.lin.pom to give user option of            ##
 	## extrapolating out of range values if desired: MM 9/26/03                  ##
+	## -- removed this since extrap doesn't make any sense for the fpl model     ##
+	##    pdh 08/30/2010                                                         ##
 	###############################################################################
-	
 	n <- length(y0)
 	
 	if(length(dilution) == 1)
@@ -82,18 +87,21 @@ calib.fpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	cov.un <- calibFit.out@cov.unscaled    
 	min.x <- min(calibFit.out@x)
 	max.x <- max(calibFit.out@x)     
-	max.range <- fpl.model(max.x, b, logParm = calibFit.out@logParm) 
-	min.range <- fpl.model(min.x, b, logParm = calibFit.out@logParm)
-	if(sign(b[2] - b[1]) < 0) {
-		oor <- ifelse(y0 > min.range[1] | y0 < max.range[1], "x", "o")
-		too.low <- ifelse(y0 > min.range[1], 1, 0)
-		too.high <- ifelse(y0 < max.range[1], 1, 0)
+	max.range <- fpl.model(max.x, b, logParm = calibFit.out@logParm)[1]
+	min.range <- fpl.model(min.x, b, logParm = calibFit.out@logParm)[1]
+	## pdh 8/31/2010
+	## here is where the limits get set and they will be used throughout
+	if(b[2] < b[1])  {
+		too.low = (y0  > min.range[1])
+		too.high = (y0 < max.range[1])
+	} else{
+		too.low = (y0  < min.range[1])
+		too.high = (y0 > max.range[1])
 	}
-	if(sign(b[2] - b[1]) > 0) {
-		oor <- ifelse(y0 < min.range[1] | y0 > max.range[1], "x", "o")
-		too.low <- ifelse(y0 < min.range[1], 1, 0)
-		too.high <- ifelse(y0 > max.range[1], 1, 0)
-	}
+	just.right = !(too.low | too.high)
+	oor <- ifelse(!just.right, "x", "o")
+	
+	
 	## MM added these next 2 lines on 3/27/03 because m may be different here
 	## than in fpl.out and its these values of m that will determine the mdc
 	## This is added an output variable 
@@ -126,97 +134,41 @@ calib.fpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	xu <- try(approx(ypu, xp, y0, ties = "mean"), TRUE)
 	if(class(xu) == "try-error")
 		xu <- approx(ypu, xp, y0, ties = "ordered")
-	xl <- xl$y
-	xu <- xu$y
+	xlow.inver <- xl$y
+	xup.inver <- xu$y
 	
-	if(sign(b[2] - b[1]) < 0) {
-		if(!extrap){                                 
-			cal.val <- ifelse(y0 > b[1], 0, cal.val)
-			cal.val <- ifelse(y0 < b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)
-		}
-		xup <- ifelse(is.na(xu) | xu >= max.x, NA, xu)
-		xup <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xup.inver <- ifelse(y0 < b[2], NA, xup)
-		xlow <- ifelse(y0 > b[1], 0, xl)
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 0, xlow)
-	}
-	else {
-		if(!extrap){                               
-			cal.val <- ifelse(y0 < b[1], 0, cal.val)
-			cal.val <- ifelse(y0 > b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)
-		}
-		xup <- ifelse(xu >= max.x, NA, xu)
-		xup.inver <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xlow <- ifelse(y0 < b[1], 0, xl)    
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 0, xlow)
-	}
 	
 	###########################################################################################
 	## computes the Wald intervals which are computed with the delta method ##
 	###########################################################################################
 	if(!calibFit.out@logParm) {
-		if(b[1] > b[2]){
-			hyb <- rep(NA,length(y0))
-			hyb[b[1] < y0] <- 0
-			hyb[b[1] >= y0] <- b[3] * exp((1/b[4]) * log((b[1] - y0[b[1] >= y0])/(y0[b[1] >= y0] - b[2])))
-		}
-		## 05-14-07: Removed the following two lines since errors were
-		## being produced in the ifelse statement
-		#hyb <- ifelse(b[1] < y0, 0, b[3] * exp((1/b[4]) *
-		#   log((b[1] - y0)/(y0 - b[2]))))
-		else {
-			hyb <- rep(NA,length(y0))
-			hyb[b[1] > y0] <- 0
-			hyb[b[1] <= y0] <- b[3] * exp((1/b[4]) * 
-							log((b[1] - y0[b[1] <= y0])/(y0[b[1] <= y0] - b[2])))
-		}
-		## 05-14-07: Removed the following two lines since errors were
-		## being produced in the ifelse statement
-		#hyb <- ifelse(b[1] > y0, 0, b[3] * exp((1/b[4]) * 
-		#        log((b[1] - y0)/(y0 - b[2]))))
-		dh.dy <- hyb * ((b[2] - b[1])/(b[4] * (b[1] - y0) * (y0 -  b[2])))
-		dh.db1 <- hyb/(b[4] * (b[1] - y0))
-		dh.db2 <- hyb/(b[4] * (y0 - b[2]))
+		## fixed
+		hyb <- rep(NA,length(y0))
+		hyb[too.low] <- 0
+		hyb[just.right] <- b[3] * exp((1/b[4]) * log((b[1] - y0[just.right])/(y0[just.right] - b[2])))
+		
+		
+	} else {
+		hyb <- rep(NA,length(y0))
+		hyb[too.low] <- 0
+		hyb[just.right] <- exp((1/b[4]) * log((b[1] - y0[just.right])/
+								(y0[just.right] - b[2])) + b[3])
+		
+	}
+	dh.dy <- hyb * ((b[2] - b[1])/(b[4] * (b[1] - y0) * (y0 -  b[2])))
+	dh.db1 <- hyb/(b[4] * (b[1] - y0))
+	dh.db2 <- hyb/(b[4] * (y0 - b[2]))
+	if(!calibFit.out@logParm){
 		dh.db3 <- hyb/b[3]
-		dh.db4 <- rep(NA,length(y0))
-		dh.db4[hyb == 0] <- 0
-		dh.db4[hyb != 0] <- ( - hyb[hyb!=0]/(b[4] * b[4])) * 
-				log((b[1] - y0[hyb!=0])/(y0[hyb!=0] - b[2]))
-		
-		## 05-14-07: Removed the following two lines since errors were
-		## being produced in the ifelse statement
-		#    dh.db4 <- ifelse(hyb == 0, 0, ( - hyb/(b[4] * b[4])) * 
-		#        log((b[1] - y0)/(y0 - b[2])))
+	} else {
+		dh.db3 = hyb
 	}
-	if(calibFit.out@logParm) {
-		if(b[1] > b[2]){ 
-			hyb <- rep(NA,length(y0))
-			hyb[b[1] < y0] <- 0
-			hyb[b[1] >= y0] <- exp((1/b[4]) * log((b[1] - y0[b[1] >= y0])/
-									(y0[b[1] >= y0] - b[2])) + b[3])
-		}
-		## 05-14-07: Removed the following two lines since errors were
-		## being produced in the ifelse statement
-		#hyb <- ifelse(b[1] < y0, 0, exp((1/b[4]) * 
-		#	log((b[1] - y0)/(y0 - b[2])) + b[3]))
-		else{ 
-			hyb <- rep(NA,length(y0))
-			hyb[b[1] > y0] <- 0
-			hyb[b[1] <= y0] <- exp((1/b[4]) * log((b[1] - y0[b[1] <= y0])/
-									(y0[b[1] <= y0] - b[2])) + b[3])
-		}
-		
-		dh.dy <- (hyb * (b[2] - b[1]))/(b[4] * (b[1] - y0) * (y0 - b[2]))
-		dh.db1 <- hyb/(b[4] * (b[1] - y0))
-		dh.db2 <- hyb/(b[4] * (y0 - b[2]))
-		dh.db3 <- hyb
-		dh.db4 <- rep(NA,length(y0))
-		dh.db4[hyb == 0] <- 0
-		dh.db4[hyb != 0] <- ( - hyb[hyb != 0]/(b[4] * b[4])) * 
-				log((b[1] - y0[hyb != 0])/(y0[hyb != 0] - b[2]))
-	}
+	dh.db4 <- rep(NA,length(y0))
+	dh.db4[too.low] <- 0
+	dh.db4[just.right] <- ( - hyb[just.right]/(b[4] * b[4])) * 
+			log((b[1] - y0[just.right])/(y0[just.right] - b[2]))
+
+	
 	dh.df <- cbind(dh.db1, dh.db2, dh.db3, dh.db4)
 	xnot.hat <- hyb
 	sigma2 <- sigma^2
@@ -224,82 +176,22 @@ calib.fpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	var.xnot.hat <- sigma2 * (dh.dy^2 * (y0^2)^calibFit.out@theta/m  + diag(dh.df %*% cov.un %*% t(dh.df)))
 	tcrit <- qt((1 + conf)/2, calibFit.out@df.residual)
 	se.xhat <- sqrt(var.xnot.hat)
-	xup <- xnot.hat + tcrit * se.xhat
-	xlow <- xnot.hat - tcrit * se.xhat
-	if(!extrap)                              ## MM 9/26
-		cal.val <- ifelse(hyb < max.x, hyb, NA)
-	## it seems like this was computed already
-	## then recomputed as hyp and then set equal?
+	xup.wald <- xnot.hat + tcrit * se.xhat
+	xlow.wald <- xnot.hat - tcrit * se.xhat
+	cal.val = hyb
 	
-	if(extrap)
-		cal.val <- hyb
-	## will not have NAs for high values but have 0s for ones too low
-	xlow.wald <- ifelse(is.finite(xlow), ifelse(xlow < 0, 0, xlow), NA)
-	xup.wald <- ifelse(xup <= max.x, xup, NA)
-	xup.waldl <- NULL
-	xlo.waldl <- NULL
-	####################################################
-	## Another set of confidence intervals for parm=1 ##
-	####################################################
-	if(!calibFit.out@logParm) {
-		if(b[1] > b[2]){ 
-			hybl <- rep(NA,length(y0))
-			hybl[b[1] < y0] <- 0
-			hybl[b[1] >= y0] <- log(b[3]) + (1/b[4]) * 
-					log((b[1] - y0[b[1] >= y0])/(y0[b[1] >= y0] - b[2]))
-		}
-		else{ 
-			hybl <- rep(NA,length(y0))
-			hybl[b[1] > y0] <- 0
-			hybl[b[1] <= y0] <- log(b[3]) + (1/b[4]) * 
-					log((b[1] - y0[b[1] <= y0])/(y0[b[1] <= y0] - b[2]))
-		}		
-		## 05-14-07: Was getting errors from the next line, added above
-		## to account for shape of curve and avoid taking the log of
-		## negative values. DVS
-		#hybl <- log(b[3]) + (1/b[4]) * log((b[1] - y0)/(y0 - b[2]))
-		dh.dyl <-  - (1/(b[4] * (b[1] - y0)) + 1/(b[4] * (y0 - b[2])))
-		dh.db1l <- 1/(b[4] * (b[1] - y0))
-		dh.db2l <- 1/(b[4] * (y0 - b[2]))
-		dh.db3l <- 1/b[3]
-		if(b[1] > b[2]){ 
-			dh.db4l <- rep(NA,length(y0))
-			dh.db4l[b[1] < y0] <- 0
-			dh.db4l[b[1] >= y0] <- (1/(b[4] * b[4])) * 
-					log((y0[b[1] >= y0] - b[2])/(b[1] - y0[b[1] >= y0]))
-		}
-		else{ 
-			dh.db4l <- rep(NA,length(y0))
-			dh.db4l[b[1] > y0] <- 0
-			dh.db4l[b[1] <= y0] <- (1/(b[4] * b[4])) * 
-					log((y0[b[1] <= y0] - b[2])/(b[1] - y0[b[1] <= y0]))
-		}		
-		
-		var.hybl <- (dh.dyl * dh.dyl) * sigma2 * (y0^(2 * 
-						calibFit.out@theta)) + sigma2 * (dh.db1l * (dh.db1l * 
-						cov.un[1, 1] + dh.db2l * cov.un[2, 1] + dh.db3l *
-						cov.un[3, 1] + dh.db4l * cov.un[4, 1]) + 
-					dh.db2l * (dh.db1l * cov.un[1, 2] + dh.db2l * 
-						cov.un[2, 2] + dh.db3l * cov.un[3, 2] + dh.db4l *
-						cov.un[4, 2]) + dh.db3l * (dh.db1l * cov.un[1, 3] + dh.db2l * 
-						cov.un[2, 3] + dh.db3l * cov.un[3, 3] + dh.db4l * cov.un[4, 3]) + 
-					dh.db4l * (dh.db1l * cov.un[1, 4] + dh.db2l * cov.un[2, 4] +
-						dh.db3l * cov.un[3, 4] + dh.db4l * cov.un[4, 4]))
-		xup.waldl <- hybl + tcrit * sqrt(var.hybl)
-		xlo.waldl <- hybl - tcrit * sqrt(var.hybl)
-		log.up <- log(max.x)
-		xup.waldl <- ifelse(xup.waldl > log.up, max.x, exp(xup.waldl))
-		xlo.waldl <- ifelse(xlo.waldl > log.up, NA, exp(xlo.waldl))
-		xup.waldl <- ifelse(is.na(cal.val), NA, xup.waldl)
-		xlo.waldl <- ifelse(is.na(cal.val), NA, xlo.waldl)
-	}
+	## set values outside the limits
+	cal.val[too.low] = xlow.inver[too.low] = xup.inver[too.low] = xlow.wald[too.low] = xup.wald[too.low]=se.xhat[too.low] = 0
+	cal.val[too.high] = xlow.inver[too.high] = xup.inver[too.high] = xlow.wald[too.high] = xup.wald[too.high]=se.xhat[too.high] = NA
+	
+	
+	
 	xlow.inver <- dcorr * xlow.inver
 	xup.inver <- dcorr * xup.inver
 	xlow.wald <- dcorr * xlow.wald
 	xup.wald <- dcorr * xup.wald
 	cal.val <- dcorr * cal.val
 	se.xhat <- dcorr * se.xhat
-#	browser()
 	## next line added by MM on 3/27/03 to compute when the
 	## estimated calibration is less than the mdc
 	lmdc <- ifelse(as.vector(cal.val) < as.vector(cmdc), "X", "O")
@@ -308,33 +200,17 @@ calib.fpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	## creates a data set with all the calibration statistics ##
 	############################################################
 	
-	if(any(is.null(xup.waldl))) { ## 05-14-07: Note, made a change from
-		## is.na to is.null. DVS
-		clims.df <- new("calib",Estimated.x = as.vector(cal.val), 
-				PredStdErr = as.vector(se.xhat), 
-				inver.low = as.vector(xlow.inver), 
-				inver.up = as.vector(xup.inver), 
-				wald.low = as.vector(xlow.wald), 
-				wald.up = as.vector(xup.wald), 
-				avg.response = as.vector(y0), 
-				dilution = as.vector(dilution), 
-				oor = as.vector(oor), mdc = as.vector(cmdc),
-				lmdc = as.vector(lmdc))
-	}
-	else {
-		clims.df <- new("calib",Estimated.x = as.vector(cal.val), 
-				PredStdErr = as.vector(se.xhat), 
-				inver.low = as.vector(xlow.inver), 
-				inver.up = as.vector(xup.inver), 
-				wald.low = as.vector(xlow.wald), 
-				wald.up = as.vector(xup.wald), 
-				avg.response = as.vector(y0), 
-				waldl.low = as.vector(xlo.waldl),
-				waldl.up = as.vector(xup.waldl), 
-				dilution = as.vector(dilution), 
-				oor = as.vector(oor), mdc = as.vector(cmdc),
-				lmdc = as.vector(lmdc))
-	}
+	clims.df <- new("calib",Estimated.x = as.vector(cal.val), 
+			PredStdErr = as.vector(se.xhat), 
+			inver.low = as.vector(xlow.inver), 
+			inver.up = as.vector(xup.inver), 
+			wald.low = as.vector(xlow.wald), 
+			wald.up = as.vector(xup.wald), 
+			avg.response = as.vector(y0), 
+			dilution = as.vector(dilution), 
+			oor = as.vector(oor), mdc = as.vector(cmdc),
+			lmdc = as.vector(lmdc))
+	
 	
 	clims.df@wald.up <- ifelse(is.na(clims.df@wald.up) & !is.na(clims.df@wald.low),
 			clims.df@Estimated.x + (clims.df@Estimated.x-clims.df@wald.low),
@@ -458,7 +334,6 @@ calib.thpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	##         of the response variable, which was get used when printing        ##  
 	## written  by Matthew Mitchell on 5/20/03                                   ##
 	## the original comments have # or ###                                       ##
-	## add extrapolation choice on 8/30/04                                       ##
 	###############################################################################
 	
 	n <- length(y0)
@@ -470,18 +345,21 @@ calib.thpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	cov.un <- calibFit.out@cov.unscaled
 	min.x <- min(calibFit.out@x)
 	max.x <- max(calibFit.out@x)
-	max.range <- thpl.model(max.x, b) 
-	min.range <- thpl.model(min.x, b)
-	if(sign(b[2] - b[1]) < 0) {
-		oor <- ifelse(y0 > min.range[1] | y0 < max.range[1], "x", "o")
-		too.low <- ifelse(y0 > min.range[1], 1, 0)
-		too.high <- ifelse(y0 < max.range[1], 1, 0)
+	max.range <- thpl.model(max.x, b)[1]
+	min.range <- thpl.model(min.x, b)[2]
+	
+	## pdh 8/31/2010
+	## here is where the limits get set and they will be used throughout
+	if(b[2] < b[1])  {
+		too.low = (y0  > min.range)
+		too.high = (y0 < max.range)
+	} else{
+		too.low = (y0  < min.range)
+		too.high = (y0 > max.range)
 	}
-	if(sign(b[2] - b[1] > 0)) {
-		oor <- ifelse(y0 < min.range[1] | y0 > max.range[1], "x", "o")
-		too.low <- ifelse(y0 < min.range[1], 1, 0)
-		too.high <- ifelse(y0 > max.range[1], 1, 0)
-	}
+	just.right = !(too.low | too.high)
+	oor <- ifelse(!just.right, "x", "o")
+	
 	
 	## MM added these next 2 lines on 3/27/03 because m may be different here
 	## than in thpl.out and its these values of m that will determine the mdc
@@ -528,44 +406,23 @@ calib.thpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	xu <- try(approx(ypu, xp, y0, ties = "mean"), TRUE)
 	if(class(xu) == "try-error")
 		xu <- approx(ypu, xp, y0, ties = "ordered")
-	xl <- xl$y
-	xu <- xu$y
-	if(sign(b[2] - b[1]) < 0) {
-		if(!extrap){                                   ## MWM 8/30/04
-			cal.val <- ifelse(y0 > b[1], 0, cal.val)
-			cal.val <- ifelse(y0 < b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)}
-		xup <- ifelse(is.na(xu) | xu >= max.x, NA, xu)
-		xup <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xup.inver <- ifelse(y0 < b[2], NA, xup)
-		xlow <- ifelse(y0 > b[1], 0, xl)
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(
-						cal.val), 0, xlow)
-	}
-	else {
-		if(!extrap){                                   ## MWM 8/30/04
-			cal.val <- ifelse(y0 < b[1], 0, cal.val)
-			cal.val <- ifelse(y0 > b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)
-		}
-		xup <- ifelse(xu >= max.x, NA, xu)
-		xup.inver <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xlow <- ifelse(y0 < b[1], 0, xl)    
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 0, xlow)
-	}
+	xlow.inver <- xl$y
+	xup.inver <- xu$y
+	
 	##############################################
 	## computes the Wald intervals              ##
 	## which are computed with the delta method ##
 	##############################################
+	hyb <- b[3]*((b[1] - y0)/(y0 - b[2]))
+	hyb[too.low] = 0
+	hyb[too.high] = NA
 	
-	if(b[1] > b[2])
-		hyb <- ifelse(b[1] < y0, 0, b[3]*((b[1] - y0)/(y0 - b[2])))
-	else 
-		hyb <- ifelse(b[1] > y0,0, b[3]*((b[1] - y0)/(y0 - b[2]))) 
 	dh.dy <- hyb * ((b[2] - b[1])/( (b[1] - y0) * (y0 -  b[2])))
 	dh.db1 <- hyb/(b[1] - y0)
 	dh.db2 <- hyb/(y0 - b[2])
+	## interesting that there is no log method available here
 	dh.db3 <- hyb/b[3]
+
 	
 	xnot.hat <- hyb
 	sigma2 <- calibFit.out@sigma^2
@@ -579,42 +436,16 @@ calib.thpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	
 	tcrit <- qt((1 + conf)/2, calibFit.out@df.residual)
 	se.xhat <- sqrt(var.xnot.hat)
-	xup <- xnot.hat + tcrit * se.xhat
-	xlow <- xnot.hat - tcrit * se.xhat
-	if(!extrap){                                 ## MWM 9/30/04
-		cal.val <- ifelse(hyb < max.x, hyb, NA)}
-	if(extrap){                                ## MWM 9/30/04
-		cal.val <- hyb}
-	xlow.wald <- ifelse(is.finite(xlow), ifelse(xlow < 0, 0, xlow), NA)
-	xup.wald <- ifelse(xup <= max.x, xup, NA)
-	xup.waldl <- NULL
-	xlo.waldl <- NULL
-	####################################################
-	## Another set of confidence intervals            ##
-	####################################################
+	xup.wald <- xnot.hat + tcrit * se.xhat
+	xlow.wald <- xnot.hat - tcrit * se.xhat
+	cal.val <- hyb
 	
-	hybl <- log(b[3]) + log((b[1] - y0)/(y0 - b[2]))
-	dh.dyl <-  - (b[1] - y0) + 1/(y0 - b[2])
-	dh.db1l <- 1/ (b[1] - y0)
-	dh.db2l <- 1/ (y0 - b[2])
-	dh.db3l <- 1/b[3]
 	
-	var.hybl <- (dh.dyl * dh.dyl) * sigma2 * (y0^(2 * 
-					calibFit.out@theta)) + sigma2 * (dh.db1l * (dh.db1l * 
-					cov.un[1, 1] + dh.db2l * cov.un[2, 1] + dh.db3l *
-					cov.un[3, 1]) + 
-				dh.db2l * (dh.db1l * cov.un[1, 2] + dh.db2l * 
-					cov.un[2, 2] + dh.db3l * cov.un[3, 2])
-				+ dh.db3l * (dh.db1l * cov.un[1, 
-							3] + dh.db2l * cov.un[2, 3] + dh.db3l * cov.un[
-							3, 3]))
-	xup.waldl <- hybl + tcrit * sqrt(var.hybl)
-	xlo.waldl <- hybl - tcrit * sqrt(var.hybl)
-	log.up <- log(max.x)
-	xup.waldl <- ifelse(xup.waldl > log.up, max.x, exp(xup.waldl))
-	xlo.waldl <- ifelse(xlo.waldl > log.up, NA, exp(xlo.waldl))
-	xup.waldl <- ifelse(is.na(cal.val), NA, xup.waldl)
-	xlo.waldl <- ifelse(is.na(cal.val), NA, xlo.waldl)
+	## set values outside the limits
+	cal.val[too.low] = xlow.inver[too.low] = xup.inver[too.low] = xlow.wald[too.low] = xup.wald[too.low]=se.xhat[too.low] = 0
+	cal.val[too.high] = xlow.inver[too.high] = xup.inver[too.high] = xlow.wald[too.high] = xup.wald[too.high]=se.xhat[too.high] = NA
+	
+	
 	
 	xlow.inver <- dcorr * xlow.inver
 	xup.inver <- dcorr * xup.inver
@@ -626,31 +457,20 @@ calib.thpl.pom <- function(calibFit.out, y0, conf = calibFit.out@conf.level,
 	## next line added by MM on 3/27/03 to compute when the
 	## estimated calibration is less than the mdc
 	lmdc <- ifelse(as.vector(cal.val) < as.vector(cmdc), "X", "O")
-		
+	
 	############################################################
 	## creates a data set with all the calibration statistics ##
 	############################################################
-	if(is.null(xup.waldl)) {
-		clims.df <- new("calib", Estimated.x = as.vector(cal.val), 
-				PredStdErr = as.vector(se.xhat), inver.low = 
-						as.vector(xlow.inver), inver.up = as.vector(
-						xup.inver), wald.low = as.vector(xlow.wald), 
-				wald.up = as.vector(xup.wald), avg.response = 
-						as.vector(y0), dilution = as.vector(dilution), 
-				oor = as.vector(oor), mdc = as.vector(cmdc),
-				lmdc = as.vector(lmdc))
-	}
-	else {
-		clims.df <- new("calib", Estimated.x  = as.vector(cal.val), 
-				PredStdErr = as.vector(se.xhat), inver.low = 
-						as.vector(xlow.inver), inver.up = as.vector(
-						xup.inver), wald.low = as.vector(xlow.wald), 
-				wald.up = as.vector(xup.wald), avg.response = 
-						as.vector(y0), waldl.low = as.vector(xlo.waldl),
-				waldl.up = as.vector(xup.waldl), dilution = 
-						as.vector(dilution), oor = as.vector(oor), mdc = as.vector(cmdc),
-				lmdc = as.vector(lmdc))
-	}
+	
+	clims.df <- new("calib", Estimated.x = as.vector(cal.val), 
+			PredStdErr = as.vector(se.xhat), inver.low = 
+					as.vector(xlow.inver), inver.up = as.vector(
+					xup.inver), wald.low = as.vector(xlow.wald), 
+			wald.up = as.vector(xup.wald), avg.response = 
+					as.vector(y0), dilution = as.vector(dilution), 
+			oor = as.vector(oor), mdc = as.vector(cmdc),
+			lmdc = as.vector(lmdc))
+	
 #    names(clims.df)[1:2] <- c(paste("Estimated",xname),"PredStdErr")  ## MWM 8/31/04 added
 #     names(clims.df)[match("response",names(clims.df))] <- paste("avg",rname,sep=".") ## MWM 9/2/04
 	clims.df@wald.up <- ifelse(is.na(clims.df@wald.up) & !is.na(clims.df@wald.low),
@@ -778,6 +598,7 @@ calib.tpl.pom <- function(calibFit.out, y0, conf = 0.9, m = calibFit.out@m, dilu
 	##                                                                           ##
 	## added extrap option as in calib.lin.pom to give user option of            ##
 	## extrapolating out of range values if desired: MM 9/26/03                  ##
+	## pdh 8/20/2010 -- removed the extrap code as it doesn't make sense here    ##
 	###############################################################################
 	
 	## Extracting necessary variables for calibration calculation
@@ -789,26 +610,26 @@ calib.tpl.pom <- function(calibFit.out, y0, conf = 0.9, m = calibFit.out@m, dilu
 	cov.un <- calibFit.out@cov.unscaled    
 	min.x <- min(calibFit.out@x)
 	max.x <- max(calibFit.out@x)     
-	max.range <- tpl.model(max.x, b, logParm = logParm) 
-	min.range <- tpl.model(min.x, b, logParm = logParm)
+	max.range <- tpl.model(max.x, b, logParm = logParm)[1]
+	min.range <- tpl.model(min.x, b, logParm = logParm)[1]
+	## pdh 8/31/2010
+	## here is where the limits get set and they will be used throughout
+	if(b[2] < b[1])  {
+		too.low = (y0  > min.range[1])
+		too.high = (y0 < max.range[1])
+	} else{
+		too.low = (y0  < min.range[1])
+		too.high = (y0 > max.range[1])
+	}
+	just.right = !(too.low | too.high)
+	oor <- ifelse(!just.right, "x", "o")
+	
 	tcrit <- qt((conf + 1)/2, calibFit.out@df.residual)
 	
 	if(length(dilution) == 1)
 		dilution <- rep(dilution, n)
 	dcorr <- 1/dilution
 	
-	## This checks to see if the values we are looking to get the calibrated values for are outside the
-	## range of x values, i.e. are we trying to extrapolate outside the sample.
-	if(b[2] < b[1]) {
-		oor <- ifelse(y0 > min.range[1] | y0 < max.range[1], "x", "o")
-		too.low <- ifelse(y0 > min.range[1], 1, 0)
-		too.high <- ifelse(y0 < max.range[1], 1, 0)
-	}
-	if(b[2] > b[1]) {
-		oor <- ifelse(y0 < min.range[1] | y0 > max.range[1], "x", "o")
-		too.low <- ifelse(y0 < min.range[1], 1, 0)
-		too.high <- ifelse(y0 > max.range[1], 1, 0)
-	}
 	## MM added these next 2 lines on 3/27/03 because m may be different here
 	## than in tpl.out and its these values of m that will determine the mdc
 	## This is added an output variable 
@@ -840,143 +661,49 @@ calib.tpl.pom <- function(calibFit.out, y0, conf = 0.9, m = calibFit.out@m, dilu
 	xu <- try(approx(ypu, xp, y0, ties = "mean"), TRUE)
 	if(class(xu) == "try-error")
 		xu <- approx(ypu, xp, y0, ties = "ordered")
-	xl <- xl$y
-	xu <- xu$y
+	xlow.inver <- xl$y
+	xup.inver <- xu$y
 	
-	if(b[2] < b[1]){
-		## Whether calibration should be extrapolated to x's outside the range
-		if(!extrap){                                 
-			cal.val <- ifelse(y0 > b[1], 0, cal.val)
-			cal.val <- ifelse(y0 < b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)
-		}
-		xup <- ifelse(is.na(xu) | xu >= max.x, NA, xu)
-		xup <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xup.inver <- ifelse(y0 < b[2], NA, xup)
-		xlow <- ifelse(y0 > b[1], 0, xl)
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 0, xlow)
-	}
-	else {
-		if(!extrap){                               
-			cal.val <- ifelse(y0 < b[1], 0, cal.val)
-			cal.val <- ifelse(y0 > b[2], NA, cal.val)
-			cal.val <- ifelse(cal.val > max.x, NA, cal.val)
-		}
-		xup <- ifelse(xu >= max.x, NA, xu)
-		xup.inver <- ifelse(is.na(xup) & cal.val == 0, 0, xup)
-		xlow <- ifelse(y0 < b[1], 0, xl)    
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 0, xlow)
-	}
+	
 	
 	############################################################################################
 	## Computes the Wald intervals which are computed with the delta method 
 	############################################################################################
+	hyb <- rep(NA,length(y0))
+	hyb[too.low] = 0
 	if(!logParm) {
-		if(b[1] > b[2]){
-			hyb <- rep(NA,length(y0))
-			hyb[(b[1] < y0)|(b[2] >= y0)] <- 0
-			hyb[(b[1] >= y0)&(b[2] < y0)] <- b[3] * exp((1/b[4]) *
-							log((b[1] - y0[(b[1] >= y0) & (b[2] < y0)])/(y0[(b[1] >= y0) & (b[2] < y0)] - b[2])))
-		}
-		else {
-			hyb <- rep(NA,length(y0))
-			hyb[(b[1] > y0)|(b[2] <= y0)] <- 0
-			hyb[(b[1] <= y0)&(b[2] > y0)] <- b[3] * exp((1/b[4]) * 
-							log((b[1] - y0[(b[1] <= y0)&(b[2] > y0)])/(y0[(b[1] <= y0)&(b[2] > y0)] - b[2])))
-		}
-		dh.dy <- hyb * ((b[2] - b[1])/(b[4] * (b[1] - y0) * (y0 -  b[2])))
+		hyb[just.right] <- b[3] * exp((1/b[4]) *
+						log((b[1] - y0[just.right])/(y0[just.right] - b[2])))		
+	} else {
+		hyb[just.right] <- exp((1/b[4]) * log((b[1] - y0[just.right])/
+								(y0[just.right] - b[2])) + b[3])
+	}
+	dh.dy <- hyb * ((b[2] - b[1])/(b[4] * (b[1] - y0) * (y0 -  b[2])))
+	if(!logParm) {
 		dh.db3 <- hyb/b[3]
-		dh.db4 <- rep(NA,length(y0))
-		dh.db4[hyb==0] <- 0
-		dh.db4[hyb!=0] <- ( - hyb[hyb!=0]/(b[4] * b[4])) * 
-				log((b[1] - y0[hyb!=0])/(y0[hyb!=0] - b[2]))
-	}
-	if(logParm){
-		if(b[1] > b[2]){ 
-			hyb <- rep(NA,length(y0))
-			hyb[(b[1] < y0)|(b[2] >= y0)] <- 0
-			hyb[(b[1] >= y0)&(b[2] < y0)] <- exp((1/b[4]) * log((b[1] - y0[(b[1] >= y0)&(b[2] < y0)])/
-									(y0[(b[1] >= y0)&(b[2] < y0)] - b[2])) + b[3])
-		}
-		else{ 
-			hyb <- rep(NA,length(y0))
-			by12 <- (b[1] >= y0)|(b[2] <= y0)
-			hyb[by12] <- 0
-			hyb[!by12] <- exp((1/b[4]) * log((b[1] - y0[!by12])/(y0[!by12] - b[2])) + b[3])
-		}
-		dh.dy <- (hyb * (b[2] - b[1]))/(b[4] * (b[1] - y0) * (y0 - b[2]))
+	} else {
 		dh.db3 <- hyb
-		dh.db4 <- rep(NA,length(y0))
-		dh.db4[hyb == 0] <- 0
-		dh.db4[hyb != 0] <- ( - hyb[hyb != 0]/(b[4] * b[4])) * log((b[1] - y0[hyb != 0])/(y0[hyb != 0] - b[2]))
+		
 	}
+
+	dh.db4 <- rep(NA,length(y0))
+	dh.db4[too.low] <- 0
+	dh.db4[just.right] <- ( - hyb[just.right]/(b[4] * b[4])) * 
+			log((b[1] - y0[just.right])/(y0[just.right] - b[2]))
 	xnot.hat <- hyb
 	dh.db <- cbind(dh.db3, dh.db4)
 	
 	var.xnot.hat <- sigma^2 * (dh.dy^2 * ((y0^2)^theta)/m + apply(dh.db, 1, function(z) t(z) %*% cov.un %*% z))
 	
 	se.xhat <- sqrt(var.xnot.hat)
-	xup <- xnot.hat + tcrit * se.xhat
-	xlow <- xnot.hat - tcrit * se.xhat
-	if(!extrap) 
-		cal.val <- ifelse(hyb < max.x, hyb, NA)
-	## it seems like this was computed already
-	## then recomputed as hyp and then set equal?
+	xup.wald <- xnot.hat + tcrit * se.xhat
+	xlow.wald <- xnot.hat - tcrit * se.xhat
+	cal.val <- hyb
 	
-	if(extrap)
-		cal.val <- hyb
-	## will not have NAs for high values but have 0s for ones too low
-	xlow.wald <- ifelse(is.finite(xlow), ifelse(xlow < 0, 0, xlow), NA)
-	xup.wald <- ifelse(xup <= max.x, xup, NA)
-	xup.waldl <- NULL
-	xlo.waldl <- NULL
-	##################################################################################################
-	## Another set of confidence intervals for when the model is not log parameterized
-	##################################################################################################
-	if(!logParm) {
-		if(b[1] > b[2]){ 
-			hybl <- rep(NA,length(y0))
-			hybl[(b[1] < y0)|(b[2] >= y0)] <- 0
-			hybl[(b[1] >= y0)&(b[2] < y0)] <- log(b[3]) + (1/b[4]) * 
-					log((b[1] - y0[(b[1] >= y0)&(b[2] < y0)])/(y0[(b[1] >= y0)&(b[2] < y0)] - b[2]))
-		}
-		else{ 
-			hybl <- rep(NA,length(y0))
-			hybl[(b[1] > y0) | (b[2] <= y0)] <- 0
-			hybl[(b[1] <= y0) & (b[2] > y0)] <- log(b[3]) + (1/b[4]) * 
-					log((b[1] - y0[(b[1] <= y0) & (b[2] > y0)])/(y0[(b[1] <= y0)&(b[2] > y0)] - b[2]))
-		}		
-		## 05-14-07: Was getting errors from the next line, added above
-		## to account for shape of curve and avoid taking the log of
-		## negative values. DVS
-		
-		dh.dyl <-  - (1/(b[4] * (b[1] - y0)) + 1/(b[4] * (y0 - b[2])))
-		dh.db3l <- 1/b[3]
-		
-		if(b[1] > b[2]){ 
-			dh.db4l <- rep(NA,length(y0))
-			dh.db4l[(b[1] < y0)|(b[2] >= y0)] <- 0
-			dh.db4l[(b[1] >= y0)&(b[2] < y0)] <- (1/(b[4] * b[4])) * 
-					log((y0[(b[1] >= y0)&(b[2] < y0)] - b[2])/(b[1] - y0[(b[1] >= y0)&(b[2] < y0)]))
-		}
-		else{ 
-			dh.db4l <- rep(NA,length(y0))
-			dh.db4l[(b[1] >= y0) | (b[2] <= y0)] <- 0
-			dh.db4l[(b[1] < y0)&(b[2] > y0)] <- (1/(b[4] * b[4])) * 
-					log((y0[(b[1] < y0)&(b[2] > y0)] - b[2])/(b[1] - y0[(b[1] < y0)&(b[2] > y0)]))
-		}		
-		
-		var.hybl <- (dh.dyl * dh.dyl) * sigma^2 * (y0^2)^theta + sigma^2 * (dh.db3l * (dh.db3l * cov.un[
-								1, 1] + dh.db4l * cov.un[2, 1]) + dh.db4l * (
-						dh.db3l * cov.un[1, 2] + dh.db4l * cov.un[2, 2]))
-		xup.waldl <- hybl + tcrit * sqrt(var.hybl)
-		xlo.waldl <- hybl - tcrit * sqrt(var.hybl)
-		log.up <- log(max.x)
-		xup.waldl <- ifelse(xup.waldl > log.up, max.x, exp(xup.waldl))
-		xlo.waldl <- ifelse(xlo.waldl > log.up, NA, exp(xlo.waldl))
-		xup.waldl <- ifelse(is.na(cal.val), NA, xup.waldl)
-		xlo.waldl <- ifelse(is.na(cal.val), NA, xlo.waldl)
-	}
+	## set values outside the limits
+	cal.val[too.low] = xlow.inver[too.low] = xup.inver[too.low] = xlow.wald[too.low] = xup.wald[too.low]=se.xhat[too.low] = 0
+	cal.val[too.high] = xlow.inver[too.high] = xup.inver[too.high] = xlow.wald[too.high] = xup.wald[too.high]=se.xhat[too.high] = NA
+	
 	xlow.inver <- dcorr * xlow.inver
 	xup.inver <- dcorr * xup.inver
 	xlow.wald <- dcorr * xlow.wald
@@ -984,44 +711,34 @@ calib.tpl.pom <- function(calibFit.out, y0, conf = 0.9, m = calibFit.out@m, dilu
 	cal.val <- dcorr * cal.val
 	se.xhat <- dcorr * se.xhat
 	
+	
 	## next line added by MM on 3/27/03 to compute when the
 	## estimated calibration is less than the mdc
 	lmdc <- ifelse(as.vector(cal.val) < as.vector(mdc.val), "X", "O")
+	
+	
+	
+	
+	
 	
 	############################################################
 	## creates a data set with all the calibration statistics ##
 	############################################################
 	
-	if(any(is.null(xup.waldl))) {
-		calib.out <- new("calib",
-				Estimated.x = cal.val,
-				PredStdErr = se.xhat, 
-				inver.low = xlow.inver, 
-				inver.up = xup.inver, 
-				wald.low = xlow.wald, 
-				wald.up = xup.wald, 
-				avg.response = y0, 
-				dilution = dilution, 
-				oor = oor, 
-				mdc = mdc.val,
-				lmdc = lmdc)
-	}
-	else {
-		calib.out <- new("calib",
-				Estimated.x = cal.val, 
-				PredStdErr = se.xhat, 
-				inver.low = xlow.inver, 
-				inver.up = xup.inver, 
-				wald.low = xlow.wald, 
-				wald.up = xup.wald, 
-				avg.response = y0, 
-				waldl.low = xlo.waldl,
-				waldl.up = xup.waldl, 
-				dilution = dilution, 
-				oor = oor, 
-				mdc = mdc.val,
-				lmdc = lmdc)
-	}
+	
+	calib.out <- new("calib",
+			Estimated.x = cal.val,
+			PredStdErr = se.xhat, 
+			inver.low = xlow.inver, 
+			inver.up = xup.inver, 
+			wald.low = xlow.wald, 
+			wald.up = xup.wald, 
+			avg.response = y0, 
+			dilution = dilution, 
+			oor = oor, 
+			mdc = mdc.val,
+			lmdc = lmdc)
+	
 	
 	calib.out@wald.up <- ifelse(is.na(calib.out@wald.up) & !is.na(calib.out@wald.low),
 			calib.out@Estimated.x + (calib.out@Estimated.x - calib.out@wald.low),
@@ -1129,18 +846,20 @@ calib.tpl.pom <- function(calibFit.out, y0, conf = 0.9, m = calibFit.out@m, dilu
 calib.lin.pom <- function(out, y0, conf = 0.95, m = out@m, dilution = 1, 
 		samp.names, truth, times, samp.units = "", dose.units = "", 
 		dose.name = "", 
-		extrap = F, 
+		extrap = FALSE, 
 		rname="response",xname="x")
 {
 	
-	if(missing(m))
+	if(missing(m)){
 		m <- out@m
+	}
 	b <- out@coefficients
 	n <- length(y0)
 	alpha <- 1 - (1 - conf)/2
 	tcrit <- qt(alpha, out@df.residual)
-	if(length(dilution) == 1)
+	if(length(dilution) == 1) {
 		dilution <- rep(dilution, n)
+	}
 	dcorr <- 1/dilution
 	max.x <- max(out@x)
 	min.x <- min(out@x, 0)
@@ -1148,13 +867,15 @@ calib.lin.pom <- function(out, y0, conf = 0.95, m = out@m, dilution = 1,
 	## MM added these next 2 lines on 3/27/03 because m may be different here
 	## than in lin.out and its these values of m that will determine the mdc
 	## This is added an output variable 
-	
 	cmdc <-  mdc(out, m = m, conf = conf)
 	cmdc <-  cmdc * dcorr
 	
 	if(out@type == "lin") {
 		cal.val <- (y0 - b[1])/b[2]
 		resp.range <- c(b[1], b[1] + b[2] * max.x)
+		if(sign(b[2])==-1) {
+			resp.range = rev(resp.range)
+		}				
 	}
 	
 	
@@ -1169,63 +890,41 @@ calib.lin.pom <- function(out, y0, conf = 0.95, m = out@m, dilution = 1,
 	xup <- rep(max.x, n)
 	cov.un <- out@cov.unscaled
 	svec <- c(cov.un[, 1], cov.un[, 2])	
-	
-	xp <- seq(min.x, max.x, len = 300)
-	if(out@type == "quad") {
+	if(out@type=="lin"){
+		## for the linear case you can solve directly
+		xp = cal.val
+		grad = cbind(1,xp)
+		ypred <- b[1] + b[2] * xp
+		qn1 <- ((ypred^2)^out@theta)/m
+		qn2 <- (1/length(out@x)) * diag(grad %*% cov.un %*% t(grad))
+		ypl <- ypred - sign(b[2]) * tcrit * out@sigma * sqrt(qn1 + qn2)
+		ypu <- ypred + sign(b[2]) * tcrit * out@sigma * sqrt(qn1 + qn2) 
+		xlow.inver = (ypl-b[1])/b[2]
+		xup.inver = (ypu-b[1])/b[2]
+	} else {
+		## for the quadratic case you have to extrapolate
+		xp <- seq(min.x, max.x, len = 300)
 		ypred <- b[1] + b[2] * xp + b[3] * xp * xp
 		grad <- cbind(1, xp, xp * xp)
+		qn1 <- ((ypred^2)^out@theta)/m
+		qn2 <- (1/length(out@x)) * diag(grad %*% cov.un %*% t(grad))
+		ypl <- ypred - sign(b[2]) * tcrit * out@sigma * sqrt(qn1 + qn2)
+		ypu <- ypred + sign(b[2]) * tcrit * out@sigma * sqrt(qn1 + qn2)
+		xlow <- try(approx(ypl, xp, y0, ties = "mean"), TRUE)
+		if(class(xlow) == "try-error") {
+			xlow <- approx(ypl, xp, y0, ties = "ordered")
+		}
+		xup <- try(approx(ypu, xp, y0, ties = "mean"), TRUE)
+		if(class(xup) == "try-error"){
+			xup <- approx(ypu, xp, y0, ties = "ordered")
+		}
+		xlow.inver <- xlow$y
+		xup.inver <- xup$y
 	}
-	if(out@type == "lin") {
-		ypred <- b[1] + b[2] * xp
-		grad <- cbind(1, xp)
-		resp.range <- c(b[1], b[1] + b[2] * max.x)
-	}
-	
-	qn1 <- ((ypred^2)^out@theta)/m
-	## 1-07-08: Note that the term '1/length(out@x)' was missing from below, i.e. the 1/n term
-	## in the confidence/prediction interval calculation. DVS
-	qn2 <- (1/length(out@x)) * diag(grad %*% cov.un %*% t(grad))
-	ypl <- ypred + sign(b[2]) * tcrit * out@sigma * 
-			sqrt(qn1 + qn2)
-	ypu <- ypred - sign(b[2]) * tcrit * out@sigma * 
-			sqrt(qn1 + qn2)
-	xlow <- try(approx(ypl, xp, y0, ties = "mean"), TRUE)
-	if(class(xlow) == "try-error")
-		xlow <- approx(ypl, xp, y0, ties = "ordered")
-	xup <- try(approx(ypu, xp, y0, ties = "mean"), TRUE)
-	if(class(xup) == "try-error")
-		xup <- approx(ypu, xp, y0, ties = "ordered")
-	xlow <- xlow$y
-	xup <- xup$y
-	
-	if(sign(b[2]) < 0) {
-		xup <- ifelse(is.na(xup) | xup >= max.x, NA, xup)
-		xup.inver <- ifelse(y0 < resp.range[2], NA, xup)
-		xlow <- ifelse(y0 > resp.range[1], 0, xlow)
-		xlow.inver <- ifelse(is.na(xlow) & is.finite(cal.val), 
-				0, xlow)
-		oor <- ifelse(y0 > resp.range[1] | y0 < resp.range[2], 
-				"x", "o")
-		too.low <- ifelse(y0 > resp.range[1], 1, 0)
-		too.high <- ifelse(y0 < resp.range[2], 1, 0)
-	}
-	else {
-		xup <- ifelse(xup >= max.x, NA, xup)
-		xup.inver <- ifelse(is.na(xup) & y0 < resp.range[1], 0, 
-				xup)
-		xlow <- ifelse(y0 < resp.range[1], 0, xlow)
-		xlow.inver <- ifelse(is.na(xlow) & y0 < resp.range[2], 
-				0, xlow)
-		oor <- ifelse(y0 < resp.range[1] | y0 > resp.range[2], 
-				"x", "o")
-		too.low <- ifelse(y0 < resp.range[1], 1, 0)
-		too.high <- ifelse(y0 > resp.range[2], 1, 0)
-	}
+
 	hyb <- cal.val
 	sigma2 <- out@sigma * out@sigma
-	##  This is incorrect - correct tcrit is at the beginning of the program
-	##  MM 4/14/03
-	##	tcrit <- qt((1 + alpha)/2, lin.out$df.res)
+	
 	if(out@type == "lin") {
 		dh.dy <- rep(1/b[2], n)
 		dh.da <- rep(-1/b[2], n)
@@ -1234,9 +933,7 @@ calib.lin.pom <- function(out, y0, conf = 0.95, m = out@m, dilution = 1,
 							out@theta)))/m + sigma2 * (dh.da * dh.da * 
 					cov.un[1, 1] + 2 * dh.da * dh.db * cov.un[1, 2] +
 					dh.db * dh.db * cov.un[2, 2])
-	}
-	
-	if(out@type == "quad") {
+	} else if(out@type == "quad") {
 		
 		dh.dy <- 1/(b[2] + 2 * b[3] * hyb)
 		dh.da <- -1/(b[2] + 2 * b[3] * hyb)
@@ -1251,18 +948,24 @@ calib.lin.pom <- function(out, y0, conf = 0.95, m = out@m, dilution = 1,
 						dh.dc * cov.un[3, 3]))
 	}
 	se.xhat <- sqrt(var.xnot.hat)
-	xup <- hyb + tcrit * se.xhat
-	xlow <- hyb - tcrit * se.xhat
-	if(!extrap){                                                     ## MM 9/27/03
-		cal.val <- ifelse(hyb < max.x, hyb, NA)
-		xlow.wald <- ifelse(is.finite(xlow), ifelse(xlow < 0, 0, xlow), NA)
-		xup.wald <- ifelse(xup <= max.x, xup, NA)
+	xup.wald <- hyb + sign(b[2])*tcrit * se.xhat
+	xlow.wald <- hyb - sign(b[2])*tcrit * se.xhat
+	if(!extrap){
+		
+		## zero out values that are too low and NA values that are too high
+		too.low = (y0 < resp.range[1])
+		too.high = (y0 > resp.range[2])
+		## set values outside the limits
+		cal.val[too.low] = xlow.inver[too.low] = xup.inver[too.low] = xlow.wald[too.low] = xup.wald[too.low]=se.xhat[too.low] = 0
+		cal.val[too.high] = xlow.inver[too.high] = xup.inver[too.high] = xlow.wald[too.high] = xup.wald[too.high]=se.xhat[too.high] = NA
+		
+	} else {
+		too.low = too.high = rep(FALSE,length(y0))	
 	}
-	if(extrap){
-		cal.val <- hyb
-		xlow.wald <- xlow
-		xup.wald <- xup
-	}
+	
+	just.right = !(too.low | too.high)
+	oor <- ifelse(!just.right, "x", "o")
+	
 	cal.val <- ifelse(cal.val > 0, cal.val, 0)  ## MM 8/30/04 - change negatives to 0
 	
 	cal.val <- dcorr * cal.val

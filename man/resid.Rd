@@ -9,8 +9,8 @@ Methods for function \code{resid} in Package `calib'
 \section{Methods}{
 \describe{
 
-\item{object = "ANY"}{ ~~describe this method here }
+\item{object = "ANY"}{Objects other than \code{calib.fit} for which \code{resid} can be used.}
 
-\item{object = "calib.fit"}{ ~~describe this method here }
+\item{object = "calib.fit"}{\code{calib.fit} object.}
 }}
 \keyword{methods}

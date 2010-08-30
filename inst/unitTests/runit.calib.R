@@ -1,14 +1,50 @@
-# TODO: Add comment
+##################################################################################
+## unit tests are setup to run with R CMD Check
+## results are for calib 2.02
 # 
-# Author: samarov
+# Author: samarov, haaland
 ###############################################################################
-
-load("inst/unitTests/data/RUnitData.rda")
-load("inst/unitTests/data/RUnitCalibTestData.rda")
-ELISA <- read.table("data/ELISA.txt", header = TRUE)
-HPLC <- read.table("data/HPLC.txt", header = TRUE)
+load("data/RUnitcalib.rda")
+ELISA <- read.table("../../data/ELISA.txt", header = TRUE)
+HPLC <- read.table("../../data/HPLC.txt", header = TRUE)
 library(RUnit)
 
+######################################################################
+## pdh 09-01-2010
+## set this up once for calib 2.02 and then save
+#model.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl", m = 2)
+#model.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "fpl.pom", m = 2)
+#model.log.fpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl", m = 2)
+#model.log.fpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.fpl.pom", m = 2)
+#model.thpl <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl", m = 2)
+#model.thpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "thpl.pom", m = 2)
+#model.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl", m = 2)
+#model.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "tpl.pom", m = 2)
+#model.log.tpl <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl", m = 2)
+#model.log.tpl.pom <- calib.fit(ELISA[,1], ELISA[,2], type = "log.tpl.pom", m = 2)
+#model.lin <- calib.fit(HPLC[,1], HPLC[,2], type = "lin.pom", m = 2)
+#model.quad <- calib.fit(HPLC[,1], HPLC[,2], type = "quad.pom", m = 2)
+#
+#calib.model.fpl <- calib(model.fpl, ELISA[,2], m = 2)
+#calib.model.fpl.pom <- calib(model.fpl.pom, ELISA[,2], m = 2)
+#calib.model.log.fpl <- calib(model.fpl.pom, ELISA[,2], m = 2)
+#calib.model.log.fpl.pom <- calib(model.fpl.pom, ELISA[,2], m = 2)
+#calib.model.thpl <- calib(model.thpl, ELISA[,2], m = 2)
+#calib.model.thpl.pom <- calib(model.thpl.pom, ELISA[,2], m = 2)
+#calib.model.tpl <- calib(model.tpl, ELISA[,2], m = 2)
+#calib.model.tpl.pom <- calib(model.tpl.pom, ELISA[,2], m = 2)
+#calib.model.log.tpl <- calib(model.log.tpl, ELISA[,2], m = 2)
+#calib.model.log.tpl.pom <- calib(model.log.tpl.pom, ELISA[,2], m = 2)
+#calib.model.lin <- calib(model.lin, HPLC[,2], m = 2)
+#calib.model.quad <- calib(model.quad, HPLC[,2], m = 2)
+#save(model.fpl,model.fpl.pom,model.log.fpl,model.log.fpl.pom,model.thpl,model.thpl.pom,
+#		model.tpl,model.tpl.pom,model.log.tpl,model.log.tpl.pom,model.lin,model.quad,
+#		calib.model.fpl,calib.model.fpl.pom,calib.model.log.fpl,calib.model.log.fpl.pom,calib.model.thpl,calib.model.thpl.pom,
+#		calib.model.tpl,calib.model.tpl.pom,calib.model.log.tpl,calib.model.log.tpl.pom,calib.model.lin,calib.model.quad,
+#		file="data/RUnitcalib.rda")
+
+
+####################################################################
 test.calibObject <- function(){
 	
 	## 1-07-09: A quick note on some the unit tests here. The inver.up and inver.low calculations

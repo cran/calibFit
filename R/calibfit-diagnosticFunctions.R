@@ -406,6 +406,7 @@ loq.fpl.pom <- function(out, m = out@m, cv = out@cv, vlen = 700, mit = 10000, to
 ##   vlen: used in computing a range of x below                     ##
 ######################################################################
 {
+#	browser()
 	cov.un <- out@cov.unscaled
 	b <- out@coefficients
 	x <- out@x
@@ -419,22 +420,17 @@ loq.fpl.pom <- function(out, m = out@m, cv = out@cv, vlen = 700, mit = 10000, to
 	yp <- as.vector(fpl.model(xp, b, logParm = out@logParm))
 	## Getting the gradient of x as a function of y
 	if(!out@logParm){
-		dh.dy <- xp * ((b[2] - b[1])/(b[4] * (b[1] - yp) * (yp - 
-							b[2])))
+		dh.dy <- xp * ((b[2] - b[1])/(b[4] * (b[1] - yp) * (yp - b[2])))
 		dh.db1 <- xp/(b[4] * (b[1] - yp))
 		dh.db2 <- xp/(b[4] * (yp - b[2]))
 		dh.db3 <- xp/b[3]
-		dh.db4 <- ( - xp/(b[4] * b[4])) * log((b[1] - yp)/(yp - 
-							b[2]))
-	}
-	else {
-		dh.dy <- (xp * (b[2] - b[1]))/(b[4] * (b[1] - yp) * (yp -
-						b[2]))
+		dh.db4 <- ( - xp/(b[4] * b[4])) * log((b[1] - yp)/(yp - b[2]))
+	} else {
+		dh.dy <- (xp * (b[2] - b[1]))/(b[4] * (b[1] - yp) * (yp -b[2]))
 		dh.db1 <- xp/(b[4] * (b[1] - yp))
 		dh.db2 <- xp/(b[4] * (yp - b[2]))
 		dh.db3 <- xp
-		dh.db4 <- ( - xp/(b[4] * b[4])) * log((b[1] - yp)/(yp - 
-							b[2]))
+		dh.db4 <- ( - xp/(b[4] * b[4])) * log((b[1] - yp)/(yp - b[2]))
 	}
 	sigma2 <- out@sigma^2
 	## Approximating variance of x using Wald's method.
@@ -444,13 +440,13 @@ loq.fpl.pom <- function(out, m = out@m, cv = out@cv, vlen = 700, mit = 10000, to
 	sd <- sqrt(var.xnot.hat)
 	xp <- xp[is.finite(sd)]
 	sd <- sd[is.finite(sd)]
-	xmin <- xp[sd/xp == min(sd/xp)]
+	xmin <- xp[sd/xp == min(sd/xp)][1]
 	
-	if(cv > min(sd/xp[xp != 0]))
-		loq.out <- approx(((sd/xp) - cv)[xp < xmin], 
-				xp[xp < xmin], 0,ties="mean")$y
-	else 
+	if(cv > min(sd/xp[xp != 0])) {
+		loq.out <- approx(((sd/xp) - cv)[xp < xmin],xp[xp < xmin], 0,ties="mean")$y
+	} else {
 		loq.out <- NA
+	}
 		
 	return(loq.out)
 }
@@ -502,7 +498,7 @@ loq.thpl.pom <- function(out, m = out@m, cv = out@cv, vlen = 700, mit =
 	sd <- sqrt(var.xnot.hat)
 	xp <- xp[is.finite(sd)]
 	sd <- sd[is.finite(sd)]
-	xmin <- xp[sd/xp == min(sd/xp)]
+	xmin <- xp[sd/xp == min(sd/xp)][1]
 	if(cv > min(sd/xp[xp != 0]))
 		loq.out <- approx(((sd/xp) - cv)[xp < xmin], 
 				xp[xp < xmin], 0, ties="mean")$y
@@ -559,7 +555,7 @@ loq.tpl.pom <- function(out, m = out@m, cv = out@cv, vlen = 700,
 	sd <- sqrt(var.xnot.hat)
 	xp <- xp[is.finite(sd)]
 	sd <- sd[is.finite(sd)]
-	xmin <- xp[sd/xp == min(sd/xp)]
+	xmin <- xp[sd/xp == min(sd/xp)][1]
 	
 	if(cv > min(sd/xp[xp != 0]))
 		## 01-25-07 Added ties="mean" to approx to avoid error message generated
@@ -618,7 +614,7 @@ loq.lin.pom <- function(out, m = out@m, cv = out@cv, vlen = 500)
 						cov.un[2, 3] + dh.dc * cov.un[3, 3]))
 	}
 	sd <- sqrt(var.xnot.hat)
-	xmin <- xp[sd/xp == min(sd/xp)]
+	xmin <- xp[sd/xp == min(sd/xp)][1]
 	xl <- min(xp)
 	xu <- xmin	### perform the search for the LOQ
 	svec <- as.vector(cov.un)

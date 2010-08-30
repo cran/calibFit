@@ -10,8 +10,8 @@
 calib.fit(x, y, b1start, b2start, b3start, b4start, calcDiagnostics = TRUE, 
 m, cv = 0.2, conf = 0.95, mx = 50, lof.calc = T, lowLim = 0.001, 
 type = c("log.fpl.pom", "fpl.pom", "log.fpl", "fpl", "log.tpl.pom", "tpl.pom", 
-"log.tpl", "tpl", "quad.pom", "log.thpl.pom", "thpl.pom", "log.thpl", 
-"thpl", "lin.pom"))
+"log.tpl", "tpl",  "log.thpl.pom", "thpl.pom", "log.thpl", 
+"thpl", "quad.pom", "quad", "lin.pom","lin"))
 }
 
 \arguments{
@@ -36,9 +36,10 @@ type = c("log.fpl.pom", "fpl.pom", "log.fpl", "fpl", "log.tpl.pom", "tpl.pom",
   			\code{fpl.pom}, \code{fpl} fit with POM, \code{log.fpl}, log parameterized \code{fpl}, \code{fpl},
   			standard \code{fpl}, \code{thpl.pom}, three parameter logistic (\code{thpl}) regression fit
   			with POM, \code{thpl} without POM \code{thpl}, log parameterized POM \code{thpl},
-  			\code{log.thpl.pom}, log parameterized \code{thpl}, \code{log.thpl}, \code{lin.quad.pom}, 
+  			\code{log.thpl.pom}, log parameterized \code{thpl}, \code{log.thpl}, \code{quad.pom}, 
   			linear regression with 
-  			a quadrattic term fit by POM, \code{lin.pom}, linear regression fit by POM.}
+  			a quadratic term fit by POM, \code{quad}, standard linear regression fit for quadratic model,
+  			\code{lin.pom}, linear regression fit by POM, \code{lin} standard linear regression fit.}
 }
 
 \value{

@@ -220,7 +220,6 @@ linPredResp <- fitted(linmodel)
 lines(conc.hplc,linPredResp)
 
 ## Plot of the data with a std FPL fit
-#par(mar = c(4,4,2,2))
 plot(log(conc.elisa),resp.elisa,
 	xlab = "log(Concentration (ng/ml))",
 	ylab = "Response",
@@ -250,7 +249,7 @@ suggests an inconsistency in our model assumptions.
 <<plotLinRes, echo=TRUE, fig=TRUE>>=
 par(mfrow=c(1,2))
 ## Residuals from linear fit
-linres <- residuals(linmodel)/summary(linmodel)$sigma
+linres <- residuals(linmodel)/summary(linmodel)[['sigma']]
 plot(linPredResp,linres,
 	 xlab = "Predicted Value of Mean (LS)",
 	 ylab = "Standardized Residuals",
@@ -283,7 +282,6 @@ variables (Figures \ref{logHPLCplot} and \ref{sqrtHPLCplot}).
 \begin{figure}[!]
 \centering
 <<logHPLCplot, echo=TRUE, fig=TRUE>>=
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(conc.hplc,log(resp.hplc),
 	 xlab = "Concentration (ng/ml)",
 	 ylab = "log(Response)")
@@ -297,7 +295,6 @@ also failed to preserve the linear relationship between the variables}
 \begin{figure}[!]
 \centering
 <<sqrtHPLCplot, echo=TRUE, fig=TRUE>>=
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(conc.hplc,sqrt(resp.hplc),
 	 xlab = "Concentration (ng/ml)",
 	 ylab = "sqrt(Response)")
@@ -374,7 +371,6 @@ as the VFE).
 \centering
 <<logAbsLogPred, echo=TRUE, fig=TRUE>>=
 par(mfrow=c(1,2))
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(log(linPredResp),log(abs(linres)),
 	xlab = "Log(LS predicted values)",
 	ylab = "Log(absolute LS residuals)",
@@ -383,7 +379,6 @@ plot(log(linPredResp),log(abs(linres)),
 linresmodel <- lm(log(abs(linres))~log(linPredResp))
 lines(log(linPredResp),fitted(linresmodel))
 
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(log(fplPredResp),log(abs(fplres)),
 	xlab = "Log(FPL predicted values)",
 	ylab = "Log(absolute FPL residuals)",
@@ -393,7 +388,7 @@ fplresmodel <- lm(log(abs(fplres))~log(fplPredResp))
 lines(log(fplPredResp),fitted(fplresmodel))
 @
 \caption{Plot of Log(absolute LS residuals) versus log(LS predicted values)}
-\label{sqrtHPLCplot}
+\label{logAbsLogPred}
 \end{figure}
 
 A brief aside, if the underlying model is in fact (\ref{vfe-model}) then it can be 
@@ -741,9 +736,8 @@ suggests an inconsistency in our model assumptions.
 
 <<plottingLinRes, echo=TRUE, fig=FALSE, results = hide>>=
 par(mfrow=c(1,2))
-#par(mar = c(3.5,3.5,1.5,1.5))
 ## Residuals from linear fit
-linres <- residuals(linmodel)/summary(linmodel)$sigma
+linres <- residuals(linmodel)/summary(linmodel)[['sigma']]
 plot(linPredResp,linres,
 	 xlab = "Predicted Value of Mean (LS)",
 	 ylab = "Standardized Residuals",
@@ -753,7 +747,6 @@ abline(h=0)
 
 ## Residuals from fpl fit
 fplres <- fplmodel@residuals/fplmodel@sigma
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(fplPredResp,fplres,
 	xlab = "Predicted Value of Mean (FPL)",
 	ylab = "Standardized Residuals",
@@ -805,7 +798,6 @@ as the VFE).
 
 <<plottingLogAbsLog, echo=TRUE, fig=FALSE, results = hide>>=
 par(mfrow=c(1,2))
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(log(linPredResp),log(abs(linres)),
 	xlab = "Log(LS predicted values)",
 	ylab = "Log(absolute LS residuals)",
@@ -814,7 +806,6 @@ plot(log(linPredResp),log(abs(linres)),
 linresmodel <- lm(log(abs(linres))~log(linPredResp))
 lines(log(linPredResp),fitted(linresmodel))
 
-#par(mar = c(3.5,3.5,1.5,1.5))
 plot(log(fplPredResp),log(abs(fplres)),
 	xlab = "Log(FPL predicted values)",
 	ylab = "Log(absolute FPL residuals)",
@@ -831,6 +822,7 @@ of the confidence intervals (Figure \ref{fit:HPLCcompareCI} and \ref{fit:ELISAco
 
 These plots can be generated as follows
 using \Rfunction{calib.fit}
+
 <<calib_fitFuns, echo=TRUE, results = hide>>=
 cal.fpl <- calib.fit(conc.elisa,resp.elisa,type="log.fpl")
 cal.lin.pom <- calib.fit(conc.hplc,resp.hplc,type="lin.pom")
