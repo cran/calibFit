@@ -4,10 +4,10 @@
 % M-x font-lock-mode
 
 % -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
-%\VignetteIndexEntry{calib}
-%\VignetteKeywords{calib}
-%\VignetteDepends{calib}
-%\VignettePackage{calib}
+%\VignetteIndexEntry{calibFit}
+%\VignetteKeywords{calibFit}
+%\VignetteDepends{calibFit}
+%\VignettePackage{calibFit}
 
 %% Postscript fonts
 \usepackage{hyperref}
@@ -36,7 +36,7 @@
 \newcommand{\code}[1]{{\texttt{#1}}}
 \SweaveOpts{keep.source=TRUE}
 
-\title{Using calib}
+\title{Using Fit}
 \author{Perry Haaland \and Daniel Samarov \and Elaine McVey}
 \date{\today}
 
@@ -54,7 +54,7 @@ termed the variance function estimating (VFE) model (Davidian and Haaland 1990).
 The second issue is dealt with by implementing the latter model fitting technique
 to the family of four parameter logistic (FPL) and linear regression models.
 In this vignette we present a detailed overview of 
-the calib package and its application to the latter type of problem.
+the calibFit package and its application to the latter type of problem.
 \end{abstract}
 
 \tableofcontents
@@ -76,7 +76,7 @@ Improper handling of the heteroscasticity often observed in experimental data
 can lead to biased estimates of assay detection limits, and inflexible model
 choices can result in inappropriate fits leading to inaccurate inference.
 
-The package we have developed,  \Rpackage{calib}, performs univariate calibration
+The package we have developed,  \Rpackage{calibFit}, performs univariate calibration
 and addresses the two aforementioned issues. A variant on the weighted least
 squares model termed the variance function estimating (VFE) model (Davidian
 and Haaland 1990) is implemented in order to model heteroscedasticity. This 
@@ -84,20 +84,20 @@ function is applied to several standard models (three and four parameter
 logistic models as well as linear and quadratic least squares models). The 
 variety of models are flexible enough to allow analyses meant for data covering 
 various portions of the response 
-curve. The calib package is designed to be useful for both statisticians and 
+curve. The calibFit package is designed to be useful for both statisticians and 
 experimentalists, with an option for user specification of the models or 
 automated model selection. We present a detailed overview of the VFE model 
 as wells as several demonstrations of application to experiment data.
 
 A note to readers of this document. Section \ref{SEC:mod-fit} presents a more
-detailed discussion of the model fitting in the \Rpackage{calib} package.
+detailed discussion of the model fitting in the \Rpackage{calibFit} package.
 Examples are worked in throughout. However, those interested in looking only at
 the examples can go directly to the Appendix in Section \ref{SEC:Ex}.
 
 \section{Model and Methodology}
 \label{SEC:mod-fit}
 
-The \Rpackage{calib} package implements two methods for model fitting, 
+The \Rpackage{calibFit} package implements two methods for model fitting, 
 the four parameter logistic (FPL) and linear regression models, 
 equations (\ref{FPLR}) and (\ref{LR}) respectively:
 
@@ -179,9 +179,9 @@ The second dataset measures the presence of antibody in a sample
 at a given concentration of a particular drug using an Enzyme Linked Immunosorbent Assay
 (ELISA).\\
 
-\noindent First load the \Rpackage{calib} library
+\noindent First load the \Rpackage{calibFit} library
 <<loadLibrary, echo=TRUE>>=
-library(calib)
+library(calibFit)
 @
 
 \noindent then the data
@@ -364,7 +364,7 @@ gained into what an appropriate variance function (VF) might be. If a generally 
 relationship is apparent in this plot, as is the case in Figure \ref{logAbsLogPred}, 
 then a constant CV VF estimating model, discussed previously, would be appropriate 
 (this turns out to be the case under
-most circumstances, for this reason \Rpackage{calib} implements the constant CV 
+most circumstances, for this reason \Rpackage{calibFit} implements the constant CV 
 as the VFE).
 
 \begin{figure}[!]
@@ -438,7 +438,7 @@ the values along the diagonal of the matrix
 (I-X(X^TGX)^{-1}X^TG)^T(I-X(X^TGX)^{-1}X^TG)
 \end{equation}
 
-\noindent In the paper by Davidian and Haaland and currently in the \Rpackage{calib} package
+\noindent In the paper by Davidian and Haaland and currently in the \Rpackage{calibFit} package
 this is not taken into consideration. For future work it may be worth exploring the effects 
 of including these terms in the model.
 
@@ -584,7 +584,7 @@ x = \frac{y-\beta_0}{\beta1}
 \noindent Calculation of the inverse in the THPL and quadratic regression cases is 
 straightforward.
 
-\Rpackage{calib} has two options for calculating the confidence intervals for the calibrated
+\Rpackage{calibFit} has two options for calculating the confidence intervals for the calibrated
 estimates. The first of the two uses the confidence intervals calculated from the fit of the
 $y$'s as a function of the $x$'s
 
@@ -669,14 +669,14 @@ x_{RDL} = min\{x: LCL_x \geq UCL_0\}
 
 Last is the limit of quantitization (LOQ). LOQ is the lowest concentration 
 at which the coefficient of variation of dose is less 
-than a fixed percent, the default is 20 in the \Rpackage{calib} package.
+than a fixed percent, the default is 20 in the \Rpackage{calibFit} package.
 
 \section{Appendix}
 \label{SEC:Ex}
 
-\noindent First load the \Rpackage{calib} library
+\noindent First load the \Rpackage{calibFit} library
 <<loadLibrary, echo=TRUE, results = hide>>=
-library(calib)
+library(calibFit)
 @
 
 \noindent then the data

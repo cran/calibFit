@@ -1,18 +1,22 @@
-Package: calib
-Version: 2.0.2
-Date: 08-30-2010
-Title: Statistical tool for calibration of plate based bioassays
-Author: Daniel Samarov <daniel_samarov@bd.com>, Perry Haaland
-        <perry_haaland@bd.com>, Elaine McVey <elaine_mcvey@bd.com>
+Package: calibFit
+Version: 2.1.0
+Date: 2011-11-15
+Title: Statistical models and tools for assay calibration
+Author: Perry Haaland <perry_haaland@bd.com>, Daniel Samarov <daniel_samarov@bd.com>,
+		Elaine McVey <elaine_mcvey@bd.com>
 Maintainer: Perry Haaland <perry_d_haaland@bd.com>
 Depends: R (>= 2.7.0), stats, nlme, methods
 Imports: graphics
 Suggests:
 Description: Provides basic S4 data structures and routines for
-        calibration of bioassays
+        calibration of bioassays. A variety of linear and nonlinear
+        calibration curves can be fit to data. Most models have a
+        Power of the Mean option for nonconstant variances. Unknown
+        concentrations can be predicted from the calibration curve.
 License: GPL-2
 URL: http://www.bd.com
-biocViews: Statistics, Infrastructure, CellBasedAssays
-Packaged: 2011-01-25 07:40:43 UTC; hornik
 Repository: CRAN
-Date/Publication: 2011-01-25 07:44:51
+Repository/R-Forge/Project: calibfun
+Repository/R-Forge/Revision: 17
+Date/Publication: 2011-11-03 21:30:45
+Packaged: 2011-11-02 22:06:16 UTC; rforge
